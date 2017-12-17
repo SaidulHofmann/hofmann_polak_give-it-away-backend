@@ -1,0 +1,27 @@
+{
+  "name": "give-it-away-backend",
+  "version": "0.0.1",
+  "description": "HSR CAS FEE Project 02",
+  "author": "Saidul Hofmann, Martin Polak",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SaidulHofmann/hofmann_polak_give-it-away-backend.git"
+  },
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@types/socket.io": "^1.4.31",
+    "body-parser": "~1.18.2",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "express": "~4.15.5",
+    "express-jwt": "^5.1.0",
+    "jsonwebtoken": "^7.1.9",
+    "nedb": "^1.8.0",
+    "morgan": "~1.9.0",
+    "serve-favicon": "~2.4.5"
+  }
+}

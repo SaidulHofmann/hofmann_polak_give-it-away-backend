@@ -1,0 +1,44 @@
+/**
+ * Project: HSR CAS FEE 2017, Project 02 - give-it-away application.
+ * Content: Contains CRUD operations for articles.
+ * Created on: 12.12.2017
+ * Author:
+ */
+
+const store = require("../services/articleStore.js");
+const util = require("../util/security");
+
+// module.exports.getNotes = function (req, res) {
+//
+//     let queryFilter = null;
+//     if (req.query.email && req.query.isFinished) {
+//         queryFilter = {"createdBy": req.query.email, "isFinished": JSON.parse(req.query.isFinished)};
+//     }
+//
+//     let querySort = null;
+//     if (req.query["order-by"] && req.query["order-direction"]) {
+//         querySort = {[req.query["order-by"]]: Number(req.query["order-direction"])};
+//     }
+//
+//     store.getNotes(queryFilter, querySort, function (err, notes) {
+//         res.json(notes || {});
+//     })
+// };
+//
+// module.exports.saveNote = function (req, res) {
+//     store.saveNote(req.body.note, function (err, newDoc) {
+//         res.json(newDoc);
+//     });
+// };
+//
+// module.exports.getNote = function (req, res) {
+//     store.getNote(req.params.id, util.current(req), function (err, note) {
+//         res.json(note);
+//     });
+// };
+//
+// module.exports.deleteNote = function (req, res) {
+//     store.deleteNote(req.params.id, util.current(req), function (err, count) {
+//         res.json(count);
+//     });
+// };
