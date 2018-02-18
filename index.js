@@ -14,15 +14,26 @@ const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const jwt = require('express-jwt');
-const jwtSecret = 'aklsdjfklöasjdcma8sd90mcklasdföasdf$ädasöfü pi340qkrlöam,dflöäasf';
+const mongoose = require('mongoose');
+const config = require('./data/mongodb');
+//const jwt = require('express-jwt');
+//const jwtSecret = 'aklsdjfklöasjdcma8sd90mcklasdföasdf$ädasöfü pi340qkrlöam,dflöäasf';
 
 
 // Aplication settings
 //-----------------------------------------------------------------------------
-app.set("jwt-secret", jwtSecret); //secret should be in a config file - or better be a private key!
-app.set("jwt-sign", {expiresIn: "1d", audience: "self", issuer: "myself"});
-app.set("jwt-validate", {secret: jwtSecret, audience: "self", issuer: "myself"});
+//app.set("jwt-secret", jwtSecret); //secret should be in a config file - or better be a private key!
+//app.set("jwt-sign", {expiresIn: "1d", audience: "self", issuer: "myself"});
+//app.set("jwt-validate", {secret: jwtSecret, audience: "self", issuer: "myself"});
+
+// Database settings
+//-----------------------------------------------------------------------------
+
+mongoose.Promise = global.Promise;
+mongoose.connect(config.DB).then(
+    () => {console.log('Database is connected') },
+    err => { console.log('Can not connect to the database'+ err)}
+);
 
 
 // Middleware configuration
@@ -38,7 +49,7 @@ app.use(express.static(path.join(__dirname, '/../give-it-away-frontend/dist')));
 // });
 
 app.use("/", require('./routes/userRoutes.js'));
-app.use(jwt(app.get("jwt-validate"))); //after this middleware a token is required!
+//app.use(jwt(app.get("jwt-validate"))); //after this middleware a token is required!
 app.use("/articles", require('./routes/articleRoutes.js'));
 
 app.use(function (err, req, res, next) {
