@@ -50,7 +50,7 @@ app.use(express.static(path.join(__dirname, '/../give-it-away-frontend/dist')));
 
 app.use("/", require('./routes/userRoutes.js'));
 //app.use(jwt(app.get("jwt-validate"))); //after this middleware a token is required!
-app.use("/articles", require('./routes/articleRoutes.js'));
+app.use("/api/articles", require('./routes/articleRoutes.js'));
 
 app.use(function (err, req, res, next) {
     if (err.name === 'UnauthorizedError') {
