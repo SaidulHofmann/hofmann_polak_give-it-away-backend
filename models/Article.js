@@ -1,8 +1,8 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+let mongoose = require('mongoose');
+let Schema = mongoose.Schema;
 
 // Define collection and schema for Items
-var Article = new Schema({
+let Article = new Schema({
     name: {
         type: String
     },
