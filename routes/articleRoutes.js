@@ -44,6 +44,13 @@ articleRoutes.route('/update/:id').post(function (req, res) {
         else {
             article.name = req.body.name;
             article.description = req.body.description;
+            article.condition = req.body.condition;
+            article.picture = req.body.picture;
+            article.video = req.body.video;
+            article.CreationDate = req.body.CreationDate;
+            article.DonationDate = req.body.DonationDate;
+
+
 
             article.save().then(item => {
                 res.json('Update complete');
