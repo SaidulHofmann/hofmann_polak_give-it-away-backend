@@ -3,6 +3,12 @@ let Schema = mongoose.Schema;
 
 // Define collection and schema for Items
 let Article = new Schema({
+    id: {
+        type: number
+    },
+    catgoryId: {
+        type: number
+    },
     name: {
         type: String
     },
@@ -18,12 +24,25 @@ let Article = new Schema({
     videos: {
         type: String
     },
-    CreationDate: {
+    handover: {
+        type: String
+    },
+    creationDate: {
         type: Date
     },
     DonationDate: {
         type: Date
+    },
+    searchwords: {
+        type: String
+    },
+    statusId: {
+        type: number
+    },
+    DonationUserid: {
+        type: number
     }
+
 
 
 
