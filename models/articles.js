@@ -8,7 +8,27 @@ let Article = new Schema({
     },
     description: {
         type: String
+    },
+    condition: {
+        type: String
+    },
+    picture: {
+        type: String
+    },
+    videos: {
+        type: String
+    },
+    CreationDate: {
+        type: Date
+    },
+    DonationDate: {
+        type: Date
     }
+
+
+
+
+
 },{
     collection: 'articles'
 });

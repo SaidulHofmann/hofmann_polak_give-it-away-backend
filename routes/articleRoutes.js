@@ -2,7 +2,7 @@ const express = require('express');
 const articleRoutes = express.Router();
 
 // Require Article model in our routes module
-const Article = require('../models/Article');
+const Article = require('../models/articles');
 
 // Defined store route
 articleRoutes.route('/add').post(function (req, res) {
