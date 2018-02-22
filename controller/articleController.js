@@ -1,12 +1,92 @@
-/**
- * Project: HSR CAS FEE 2017, Project 02 - give-it-away application.
- * Content: Contains CRUD operations for articles.
- * Created on: 12.12.2017
- * Author:
- */
+// Article controller that handles article api requests.
 
-const store = require("../services/articleStore.js");
-const util = require("../util/security");
+const mongoose = require('mongoose');
+const Article = require('../models/Article');
+const _ = require('underscore');
+// const util = require("../util/security");
+
+
+exports.showArticle = function (req, res) {
+    Article.findById(req.params.id, function (err, article) {
+        if (err) {
+            console.log(err);
+        }
+        else {
+            res.json(article);
+        }
+    });
+}
+
+exports.getArticles = function (req, res) {
+    Article.find(function (err, article) {
+        if (err) {
+            console.log(err);
+        }
+        else {
+            res.json(article);
+        }
+    });
+}
+
+exports.createArticle = function (req, res) {
+    let article = new Article(req.body);
+    article.save()
+        .then(article => {
+            res.json(article);
+        })
+        .catch(err => {
+            res.status(400).send("Unable to save the article.");
+        });
+}
+
+exports.updateArticle = function (req, res) {
+    Article.findById(req.params.id, function (err, article) {
+        if (err) {
+            res.json(err);
+        }
+        else if (!article) {
+            res.json('Article not found.');
+        }
+        else {
+            article = _.extend(article, req.body);
+            article.save(function (err) {
+                if (err) {
+                    res.json(err);
+                } else {
+                    res.json(article);
+                }
+            });
+        }
+    });
+}
+
+exports.deleteArticle = function (req, res) {
+    Article.findById(req.params.id, function (err, article) {
+        if (err) {
+            res.json(err);
+        }
+        else if (!article) {
+            res.json('Article not found.');
+        }
+        else {
+            article.remove(function (err) {
+                if(err) {
+                    res.json(err);
+                }
+                else {
+                    res.json(article);
+                }
+            });
+        }
+    });
+}
+
+
+
+// *** Deprecated code from the note application. Can be deleted later. ***
+
+// const store = require("../services/articleStore.js");
+// const util = require("../util/security");
 
 // module.exports.getNotes = function (req, res) {
 //

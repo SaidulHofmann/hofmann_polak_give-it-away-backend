@@ -15,7 +15,7 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const config = require('./data/mongodb');
+const mongooseConfig = require('./data/mongodb');
 //const jwt = require('express-jwt');
 //const jwtSecret = 'aklsdjfklöasjdcma8sd90mcklasdföasdf$ädasöfü pi340qkrlöam,dflöäasf';
 
@@ -30,9 +30,9 @@ const config = require('./data/mongodb');
 //-----------------------------------------------------------------------------
 
 mongoose.Promise = global.Promise;
-mongoose.connect(config.DB).then(
-    () => {console.log('Database is connected') },
-    err => { console.log('Can not connect to the database'+ err)}
+mongoose.connect(mongooseConfig.DB).then(
+    () => { console.log('Database is connected') },
+    err => { console.log('Can not connect to the database'+ err) }
 );
 
 
