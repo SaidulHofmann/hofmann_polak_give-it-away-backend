@@ -70,7 +70,7 @@ app.use(function (req, res, next) {
 //     res.sendFile("index.html", {root: __dirname + '/../give-it-away-frontend/dist/'});
 // });
 
-app.use("/", require('./routes/userRoutes.js'));
+app.use("/api/users", require('./routes/userRoutes.js'));
 //app.use(jwt(app.get("jwt-validate"))); //after this middleware a token is required!
 app.use("/api/articles", require('./routes/articleRoutes.js'));
 
