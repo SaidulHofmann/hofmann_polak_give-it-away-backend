@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const userService = require('../services/userStore.js');
+const userService = require('../services/user.service.js');
 
 function publicIsLoggedIn(req) {
     return req.user != null;

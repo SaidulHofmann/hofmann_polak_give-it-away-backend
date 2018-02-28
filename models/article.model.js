@@ -1,8 +1,9 @@
 // Article model with definition of collection, document schema and functions.
 
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate');
 
-const articleSchema = mongoose.Schema(
+const ArticleSchema = mongoose.Schema(
     {
         catgoryId: {
             type: Number
@@ -44,8 +45,5 @@ const articleSchema = mongoose.Schema(
     { collection: 'articles'}
 );
 
-// Functions for the collection
-
-
-
-module.exports = mongoose.model('Article', articleSchema);
+ArticleSchema.plugin(mongoosePaginate);
+module.exports = mongoose.model('Article', ArticleSchema);

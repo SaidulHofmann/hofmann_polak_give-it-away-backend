@@ -2,7 +2,7 @@
 
 
 const _ = require('underscore');
-const store = require('../services/userStore');
+const store = require('../services/user.service');
 // const util = require("../util/security");
 
 

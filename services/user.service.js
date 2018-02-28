@@ -1,14 +1,9 @@
-/**
- * Project: HSR CAS FEE 2017, Project 02 - give-it-away application.
- * Content: Contains service methods for user registration and authentification.
- * Created on: 12.12.2017
- * Author: Saidul Hofmann
- */
+/* User service. Contains CRUD operations and business logic functions. */
 
 const crypto = require('crypto');
 const cryptoUtil = require('../util/cryptoUtil');
 
-const User = require('../models/User');
+const User = require('../models/user.model');
 
 
 

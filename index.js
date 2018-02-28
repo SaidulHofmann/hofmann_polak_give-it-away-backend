@@ -14,8 +14,7 @@ const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-const mongooseConfig = require('./data/mongodb');
+const databaseConnectionUrl = 'mongodb://admin:admin@ds141068.mlab.com:41068/giveitaway';
 //const jwt = require('express-jwt');
 //const jwtSecret = 'aklsdjfklöasjdcma8sd90mcklasdföasdf$ädasöfü pi340qkrlöam,dflöäasf';
 
@@ -26,17 +25,17 @@ const mongooseConfig = require('./data/mongodb');
 //app.set("jwt-sign", {expiresIn: "1d", audience: "self", issuer: "myself"});
 //app.set("jwt-validate", {secret: jwtSecret, audience: "self", issuer: "myself"});
 
-// Database settings
+
+// Database Connection
 //-----------------------------------------------------------------------------
-
+const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-mongoose.connect(mongooseConfig.DB).then(
-    () => { console.log('Database is connected') },
-    err => { console.log('Can not connect to the database'+ err) }
-);
+mongoose.connect(databaseConnectionUrl)
+    .then(() => { console.log('Database is connected')})
+    .catch((err) => { console.log('Can not connect to the database'+ err)});
 
 
-// Middleware configuration
+// Middleware configuartion
 //-----------------------------------------------------------------------------
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
@@ -45,34 +44,34 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '/../give-it-away-frontend/dist')));
 
 
-// Add headers
+// Routing
+//-----------------------------------------------------------------------------
+
+// CORS configuration - add headers.
 app.use(function (req, res, next) {
-
-    // Website you wish to allow to connect
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
-
-    // Request methods you wish to allow
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-
-    // Request headers you wish to allow
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
 
     // Set to true if you need the website to include cookies in the requests sent
     // to the API (e.g. in case you use sessions)
     res.setHeader('Access-Control-Allow-Credentials', true);
-
-    // Pass to next layer of middleware
     next();
 });
 
-
+// User and general routes.
+//-------------------------
 // app.get("/", function (req, res) {
-//     res.sendFile("index.html", {root: __dirname + '/../give-it-away-frontend/dist/'});
+//     res.sendFile("index.html", {root: __dirname + '/../hofmann_polak_give-it-away-frontend/dist/'});
 // });
-
-app.use("/api/users", require('./routes/userRoutes.js'));
+app.use("/users", require('./routes/user.route'));
 //app.use(jwt(app.get("jwt-validate"))); //after this middleware a token is required!
-app.use("/api/articles", require('./routes/articleRoutes.js'));
+
+
+// API routes for all routes matching /api.
+//-------------------------------------------
+app.use('/api', require('./routes/api.route'));
+
 
 app.use(function (err, req, res, next) {
     if (err.name === 'UnauthorizedError') {
