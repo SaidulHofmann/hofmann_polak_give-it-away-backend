@@ -8,7 +8,7 @@ const articleController = require('../../controllers/article.controller');
 router.get('/', articleController.getArticles);
 router.get('/:id', articleController.getArticleById);
 router.post('/', articleController.createArticle);
-router.put('/:id', articleController.updateArticle) ;
+router.put('/', articleController.updateArticle) ;
 router.delete('/:id', articleController.deleteArticle);
 
 

@@ -48,7 +48,7 @@ exports.createArticle = async function (req, res, next) {
 
 exports.updateArticle = async function (req, res, next) {
     try {
-        let id = req.params.id;
+        let id = req.body._id;
         if (!id) {
             return res.status(400).json({status: 400, message: "Id must be present."});
         }
