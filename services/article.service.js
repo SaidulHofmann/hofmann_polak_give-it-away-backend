@@ -7,9 +7,9 @@ _this = this;
 
 
 exports.getArticles = async function (query, page, limit) {
-    // Options setup for the mongoose paginate.
-    let options = {page, limit};
     try {
+        // Options setup for the mongoose paginate.
+        let options = {page, limit};
         let articles = await Article.paginate(query, options);
         return articles;
     } catch (ex) {
@@ -18,9 +18,8 @@ exports.getArticles = async function (query, page, limit) {
 };
 
 exports.getArticleById = async function (id) {
-    let foundArticle = null;
     try {
-        foundArticle = await Article.findById(id);
+        let foundArticle = await Article.findById(id);
         if (!foundArticle) { return false; }
         return foundArticle;
     } catch (ex) {

@@ -9,10 +9,21 @@ _this = this;
 
 exports.getArticles = async function (req, res, next) {
     try {
+        let articles = null;
         // Check the existence of the query parameters. If they don't exist, assign a default value.
         let page = req.query.page ? req.query.page : 1;
         let limit = req.query.limit ? req.query.limit : 10;
-        let articles = await ArticleService.getArticles({}, page, limit);
+        let name = req.query.name;
+
+        // Search by name.
+        if (name) {
+            let query = {'name': new RegExp(name, 'i')};
+            articles = await ArticleService.getArticles(query, page, limit);
+        }
+        // Return articles unfiltered.
+        else {
+            articles = await ArticleService.getArticles({}, page, limit);
+        }
         return res.status(200).json({status: 200, data: articles, message: "Articles received successfully."});
     } catch (ex) {
         return res.status(400).json({status: 400, message: ex.message});
