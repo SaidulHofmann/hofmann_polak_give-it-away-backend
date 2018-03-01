@@ -54,7 +54,7 @@ exports.updateArticle = async function (id, params) {
     let oldArticle = null;
     try {
         oldArticle = await Article.findById(id);
-        if (!oldArticle) { return false; }
+        if (!oldArticle) { throw Error("Article could not be found."); }
     } catch (ex) {
         throw Error("Error occured while retrieving the article. " + ex.message);
     }
@@ -70,25 +70,13 @@ exports.updateArticle = async function (id, params) {
 exports.deleteArticle = async function (id) {
     let article = null;
     try {
-        console.log("service deleteArticle id: " +id);
         article = await Article.findById(id);
-        console.log("service deleteArticle article: " +article);
-        if (!article) {
-            //return false;
-            throw Error("Article could not be found.");
-        }
+        if (!article) { throw Error("Article could not be found."); }
     } catch (ex) {
         throw Error("Error occured while retrieving the article. " + ex.message);
     }
     try {
-        // let deleted = await Article.remove({_id: id});
-        // if (deleted.result.n === 0) {
-        //     throw Error("Article could not be deleted.");
-        // }
-
         let deletedArticle = await article.remove();
-
-
         return deletedArticle;
     } catch (ex) {
         throw Error("Error occured while deleting the article. " + ex.message);
