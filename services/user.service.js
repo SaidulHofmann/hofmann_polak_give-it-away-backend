@@ -43,4 +43,4 @@ function User(email, passwort) {
 
 module.exports = {add: publicRegisterUser, authenticate: publicAuthentication};
 */
-module.exports = {add: publicRegisterUser};
+module.exports = {createUser: publicRegisterUser};

@@ -28,12 +28,24 @@ const databaseConnectionUrl = 'mongodb://admin:admin@ds141068.mlab.com:41068/giv
 
 // Database Connection
 //-----------------------------------------------------------------------------
+
+//Test
+//const ArticleService = require('./services/article.service');
+
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-mongoose.connect(databaseConnectionUrl)
-    .then(() => { console.log('Database is connected')})
-    .catch((err) => { console.log('Can not connect to the database'+ err)});
-
+mongoose.connect(databaseConnectionUrl);
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+    console.log('Database is connected');
+    //Test
+    // try {
+    //     ArticleService.createInitialEntries();
+    // } catch(ex){
+    //     console.log(ex);
+    // }
+});
 
 // Middleware configuartion
 //-----------------------------------------------------------------------------

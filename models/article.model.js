@@ -2,48 +2,27 @@
 
 const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate');
+const ObjectId = mongoose.Schema.ObjectId;
 
-const ArticleSchema = mongoose.Schema(
+const articleSchema = mongoose.Schema(
     {
-        catgoryId: {
-            type: Number
-        },
-        name: {
-            type: String, required: true
-        },
-        description: {
-            type: String
-        },
-        condition: {
-            type: String
-        },
-        picture: {
-            type: String
-        },
-        videos: {
-            type: String
-        },
-        handover: {
-            type: String
-        },
-        creationDate: {
-            type: Date, default: Date.now
-        },
-        DonationDate: {
-            type: Date
-        },
-        searchwords: {
-            type: String
-        },
-        statusId: {
-            type: Number
-        },
-        DonationUserid: {
-            type: Number
-        }
+        name:                   { type: String, required: true, index: true, trim: true },
+        description:            { type: String },
+        pictureOverview:        { type: String }, // required
+        pictures:               { type: [String] },
+        videos:                 { type: [String] },
+        handover:               { type: String },
+        donationDate:           { type: Date },
+        searchwords:            { type: [String] },
+
+        userIdPublisher:        { type: ObjectId }, // required
+        userIdDonee:            { type: ObjectId },
+        articleCategoryId:      { type: String }, // required
+        articleStatusId:        { type: String }
     },
-    { collection: 'articles'}
+    { collection: 'articles'},
+    { timestamps: true }
 );
 
-ArticleSchema.plugin(mongoosePaginate);
-module.exports = mongoose.model('Article', ArticleSchema);
+articleSchema.plugin(mongoosePaginate);
+module.exports = mongoose.model('Article', articleSchema);

@@ -1,8 +1,8 @@
-// User controller that handles article api requests.
+// User controller.
 
 
 const _ = require('underscore');
-const store = require('../services/user.service');
+const userService = require('../services/user.service');
 // const util = require("../util/security");
 
 
@@ -10,7 +10,7 @@ const store = require('../services/user.service');
 
 exports.createUser = function (req, res) {
 
-    let register = store.add(req.body, function (err,register) {
+    let register = userService.createUser(req.body, function (err,register) {
         res.json(register)
     });
 

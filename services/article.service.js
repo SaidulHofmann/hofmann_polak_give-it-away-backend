@@ -81,3 +81,127 @@ exports.deleteArticle = async function (id) {
         throw Error("Error occured while deleting the article. " + ex.message);
     }
 };
+
+exports.createInitialEntries = async function () {
+    try {
+
+        // Article 1
+        this.createArticle(new Article({
+            _id:                "5a9dbe131a63712088173dcd",
+            name:               "Motorrad 1",
+            description:        "Yamaha 1000ccm",
+            pictureOverview:    "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Yamaha_img_2227.jpg/1200px-Yamaha_img_2227.jpg",
+            pictures:           [
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Yamaha_img_2227.jpg/1200px-Yamaha_img_2227.jpg",
+                "http://www.motorcyclespecs.co.za/Gallery%20%20A/Yamaha%20XS650B%2075%20%201.jpg",
+                "http://nippon-classic.de/wp-content/uploads/2015/07/Yamaha_XS650_1970-1978_0018_YME1-1024x812.jpg",
+                "http://nippon-classic.de/wp-content/uploads/2015/07/Yamaha_XS650_1970-1978_0019_YME.jpg",
+                "https://i.ytimg.com/vi/51h-ESZqIKg/maxresdefault.jpg"
+                                ],
+            videos:             [],
+            handover:           "Abholung durch den Kunden.",
+            donationDate:       null,
+            searchwords:        ["Motorrad", "Yamaha", "Yamaha 650"],
+            //userIdPublisher:    '',
+            //userIdDonee:        '',
+            articleCategoryId:  "mobility",
+            articleStatusId:    "available"
+        }));
+
+        // Article 2
+        this.createArticle(new Article({
+            _id:                "5a9dbe131a63712088173dce",
+            name:               "Motorrad 2",
+            description:        "Yamaha 2000ccm",
+            pictureOverview:    "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Yamaha_img_2227.jpg/1200px-Yamaha_img_2227.jpg",
+            pictures:           [
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Yamaha_img_2227.jpg/1200px-Yamaha_img_2227.jpg",
+                "http://www.motorcyclespecs.co.za/Gallery%20%20A/Yamaha%20XS650B%2075%20%201.jpg",
+                "http://nippon-classic.de/wp-content/uploads/2015/07/Yamaha_XS650_1970-1978_0018_YME1-1024x812.jpg",
+                "http://nippon-classic.de/wp-content/uploads/2015/07/Yamaha_XS650_1970-1978_0019_YME.jpg",
+                "https://i.ytimg.com/vi/51h-ESZqIKg/maxresdefault.jpg"
+            ],
+            videos:             [],
+            handover:           "Abholung durch den Kunden.",
+            donationDate:       null,
+            searchwords:        ["Motorrad", "Yamaha", "Yamaha 650"],
+            //userIdPublisher:    '',
+            //userIdDonee:        '',
+            articleCategoryId:  "mobility",
+            articleStatusId:    "available"
+        }));
+
+        // Article 3
+        this.createArticle(new Article({
+            _id:                "5a9dbe131a63712088173dcf",
+            name:               "Motorrad 3",
+            description:        "Yamaha 3000ccm",
+            pictureOverview:    "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Yamaha_img_2227.jpg/1200px-Yamaha_img_2227.jpg",
+            pictures:           [
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Yamaha_img_2227.jpg/1200px-Yamaha_img_2227.jpg",
+                "http://www.motorcyclespecs.co.za/Gallery%20%20A/Yamaha%20XS650B%2075%20%201.jpg",
+                "http://nippon-classic.de/wp-content/uploads/2015/07/Yamaha_XS650_1970-1978_0018_YME1-1024x812.jpg",
+                "http://nippon-classic.de/wp-content/uploads/2015/07/Yamaha_XS650_1970-1978_0019_YME.jpg",
+                "https://i.ytimg.com/vi/51h-ESZqIKg/maxresdefault.jpg"
+            ],
+            videos:             [],
+            handover:           "Abholung durch den Kunden.",
+            donationDate:       null,
+            searchwords:        ["Motorrad", "Yamaha", "Yamaha 650"],
+            //userIdPublisher:    '',
+            //userIdDonee:        '',
+            articleCategoryId:  "mobility",
+            articleStatusId:    "available"
+        }));
+
+        // Article 4
+        this.createArticle(new Article({
+            _id:                "5a9dbe131a63712088173dd0",
+            name:               "Motorrad 4",
+            description:        "Yamaha 4000ccm",
+            pictureOverview:    "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Yamaha_img_2227.jpg/1200px-Yamaha_img_2227.jpg",
+            pictures:           [
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Yamaha_img_2227.jpg/1200px-Yamaha_img_2227.jpg",
+                "http://www.motorcyclespecs.co.za/Gallery%20%20A/Yamaha%20XS650B%2075%20%201.jpg",
+                "http://nippon-classic.de/wp-content/uploads/2015/07/Yamaha_XS650_1970-1978_0018_YME1-1024x812.jpg",
+                "http://nippon-classic.de/wp-content/uploads/2015/07/Yamaha_XS650_1970-1978_0019_YME.jpg",
+                "https://i.ytimg.com/vi/51h-ESZqIKg/maxresdefault.jpg"
+            ],
+            videos:             [],
+            handover:           "Abholung durch den Kunden.",
+            donationDate:       null,
+            searchwords:        ["Motorrad", "Yamaha", "Yamaha 650"],
+            //userIdPublisher:    '',
+            //userIdDonee:        '',
+            articleCategoryId:  "mobility",
+            articleStatusId:    "available"
+        }));
+
+        // Article 5
+        this.createArticle(new Article({
+            _id:                "5a9dbe131a63712088173dd1",
+            name:               "Motorrad 5",
+            description:        "Yamaha 5000ccm",
+            pictureOverview:    "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Yamaha_img_2227.jpg/1200px-Yamaha_img_2227.jpg",
+            pictures:           [
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Yamaha_img_2227.jpg/1200px-Yamaha_img_2227.jpg",
+                "http://www.motorcyclespecs.co.za/Gallery%20%20A/Yamaha%20XS650B%2075%20%201.jpg",
+                "http://nippon-classic.de/wp-content/uploads/2015/07/Yamaha_XS650_1970-1978_0018_YME1-1024x812.jpg",
+                "http://nippon-classic.de/wp-content/uploads/2015/07/Yamaha_XS650_1970-1978_0019_YME.jpg",
+                "https://i.ytimg.com/vi/51h-ESZqIKg/maxresdefault.jpg"
+            ],
+            videos:             [],
+            handover:           "Abholung durch den Kunden.",
+            donationDate:       null,
+            searchwords:        ["Motorrad", "Yamaha", "Yamaha 650"],
+            //userIdPublisher:    '',
+            //userIdDonee:        '',
+            articleCategoryId:  "mobility",
+            articleStatusId:    "available"
+        }));
+
+        console.log("Article entries created successfully.");
+    } catch(ex) {
+        throw Error("Error while creating initial values for article. " + ex.message);
+    }
+};
