@@ -8,30 +8,23 @@ const reservationSchema = mongoose.Schema(
     {
         articleId:              { type: ObjectId },
         userId:                 { type: ObjectId },
-        commentPublisher:       { type: [String] },
-        commentApplicant:       { type: [String] }
+        commentPublisher:       { type: String },
+        commentApplicant:       { type: String }
     },
-    { collection: 'reservations'},
-    { timestamps: true }
+    { collection: 'reservations', timestamps: true }
 );
 
-schema.statics.findByUserIdAndArticleId = function (userId, articleId, cb) {
-    this.findOne({userId: userId, articleId: articleId}, function(err,reservation) {
-        if (err) { return cb(err); }
-        if (!reservation) { return cb(); }
-        return cb(err, reservation);
-    });
-};
+reservationSchema.index({ articleId: 1, userId: 1 }, { unique: true });
 
-// schema.statics.findByUserIdAndArticleId = async function (userId, articleId) {
-//     try {
-//         let reservation = await this.findOne({userId: userId, articleId: articleId});
-//         if (!reservation) { return false; }
-//         return reservation;
-//     } catch (ex) {
-//         throw Error("Error occured while retrieving the reservation. " + ex.message);
-//     }
-// };
+reservationSchema.statics.findByUserIdAndArticleId = async function (userId, articleId) {
+    try {
+        let reservation = await this.findOne({userId: userId, articleId: articleId});
+        if (!reservation) { return false; }
+        return reservation;
+    } catch (ex) {
+        throw Error("Error occured while retrieving the reservation. " + ex.message);
+    }
+};
 
 
 

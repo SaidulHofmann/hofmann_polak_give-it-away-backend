@@ -5,6 +5,7 @@ const router = express.Router();
 
 
 router.use('/articles', require('./api/article.route'));
+router.use('/reservations', require('./api/reservation.route'));
 
 
 

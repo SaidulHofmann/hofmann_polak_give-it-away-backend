@@ -29,12 +29,13 @@ exports.getArticleById = async function (id) {
 
 /**
  * Creates an article entry in the database.
- * @param article: new mongoose article object.
+ * @param jsonArticle: Article object, partial or complete, in json format.
  * @returns {Promise<*>}
  */
-exports.createArticle = async function (article) {
+exports.createArticle = async function (jsonArticle) {
     try {
-        let savedArticle = await article.save();
+        let newArticle = new Article(jsonArticle);
+        let savedArticle = await newArticle.save();
         return savedArticle;
     } catch (ex) {
         throw Error("Error while creating article. " + ex.message);
@@ -43,22 +44,19 @@ exports.createArticle = async function (article) {
 
 /**
  * Uodates an existing article.
- * @param id : the id of the object to update.
- * @param params : http request body or json object.
+ * @param jsonArticle : Article object, partial or complete, in json format.
  * @returns {Promise<*>}
- * @remark : An article object cannot be used as input parameter
- * to update the old article object because of save conflict in mongoose.
  */
-exports.updateArticle = async function (id, params) {
+exports.updateArticle = async function (jsonArticle) {
     let oldArticle = null;
     try {
-        oldArticle = await Article.findById(id);
+        oldArticle = await Article.findById(jsonArticle._id);
         if (!oldArticle) { throw Error("Article could not be found."); }
     } catch (ex) {
         throw Error("Error occured while retrieving the article. " + ex.message);
     }
     try {
-        Object.assign(oldArticle, params);
+        Object.assign(oldArticle, jsonArticle);
         let savedArticle = await oldArticle.save();
         return savedArticle;
     } catch (ex) {
@@ -84,10 +82,9 @@ exports.deleteArticle = async function (id) {
 
 exports.createInitialEntries = async function () {
     try {
-
         // Article 1
-        this.createArticle(new Article({
-            _id:                "5a9dbe131a63712088173dcd",
+        await this.createArticle(new Article({
+            _id:                "5a9e4e65bdd7751e5033123f",
             name:               "Motorrad 1",
             description:        "Yamaha 1000ccm",
             pictureOverview:    "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Yamaha_img_2227.jpg/1200px-Yamaha_img_2227.jpg",
@@ -101,7 +98,7 @@ exports.createInitialEntries = async function () {
             videos:             [],
             handover:           "Abholung durch den Kunden.",
             donationDate:       null,
-            searchwords:        ["Motorrad", "Yamaha", "Yamaha 650"],
+            searchwords:        ["Motorrad", "Yamaha", "Yamaha 1000ccm"],
             //userIdPublisher:    '',
             //userIdDonee:        '',
             articleCategoryId:  "mobility",
@@ -109,8 +106,8 @@ exports.createInitialEntries = async function () {
         }));
 
         // Article 2
-        this.createArticle(new Article({
-            _id:                "5a9dbe131a63712088173dce",
+        await this.createArticle(new Article({
+            _id:                "5a9e4e65bdd7751e50331240",
             name:               "Motorrad 2",
             description:        "Yamaha 2000ccm",
             pictureOverview:    "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Yamaha_img_2227.jpg/1200px-Yamaha_img_2227.jpg",
@@ -124,7 +121,7 @@ exports.createInitialEntries = async function () {
             videos:             [],
             handover:           "Abholung durch den Kunden.",
             donationDate:       null,
-            searchwords:        ["Motorrad", "Yamaha", "Yamaha 650"],
+            searchwords:        ["Motorrad", "Yamaha", "Yamaha 2000ccm"],
             //userIdPublisher:    '',
             //userIdDonee:        '',
             articleCategoryId:  "mobility",
@@ -132,8 +129,8 @@ exports.createInitialEntries = async function () {
         }));
 
         // Article 3
-        this.createArticle(new Article({
-            _id:                "5a9dbe131a63712088173dcf",
+        await this.createArticle(new Article({
+            _id:                "5a9e4e65bdd7751e50331241",
             name:               "Motorrad 3",
             description:        "Yamaha 3000ccm",
             pictureOverview:    "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Yamaha_img_2227.jpg/1200px-Yamaha_img_2227.jpg",
@@ -147,7 +144,7 @@ exports.createInitialEntries = async function () {
             videos:             [],
             handover:           "Abholung durch den Kunden.",
             donationDate:       null,
-            searchwords:        ["Motorrad", "Yamaha", "Yamaha 650"],
+            searchwords:        ["Motorrad", "Yamaha", "Yamaha 3000"],
             //userIdPublisher:    '',
             //userIdDonee:        '',
             articleCategoryId:  "mobility",
@@ -155,8 +152,8 @@ exports.createInitialEntries = async function () {
         }));
 
         // Article 4
-        this.createArticle(new Article({
-            _id:                "5a9dbe131a63712088173dd0",
+        await this.createArticle(new Article({
+            _id:                "5a9e4e65bdd7751e50331242",
             name:               "Motorrad 4",
             description:        "Yamaha 4000ccm",
             pictureOverview:    "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Yamaha_img_2227.jpg/1200px-Yamaha_img_2227.jpg",
@@ -170,7 +167,7 @@ exports.createInitialEntries = async function () {
             videos:             [],
             handover:           "Abholung durch den Kunden.",
             donationDate:       null,
-            searchwords:        ["Motorrad", "Yamaha", "Yamaha 650"],
+            searchwords:        ["Motorrad", "Yamaha", "Yamaha 4000ccm"],
             //userIdPublisher:    '',
             //userIdDonee:        '',
             articleCategoryId:  "mobility",
@@ -178,8 +175,8 @@ exports.createInitialEntries = async function () {
         }));
 
         // Article 5
-        this.createArticle(new Article({
-            _id:                "5a9dbe131a63712088173dd1",
+        await this.createArticle(new Article({
+            _id:                "5a9e4e65bdd7751e50331243",
             name:               "Motorrad 5",
             description:        "Yamaha 5000ccm",
             pictureOverview:    "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Yamaha_img_2227.jpg/1200px-Yamaha_img_2227.jpg",
@@ -193,7 +190,7 @@ exports.createInitialEntries = async function () {
             videos:             [],
             handover:           "Abholung durch den Kunden.",
             donationDate:       null,
-            searchwords:        ["Motorrad", "Yamaha", "Yamaha 650"],
+            tags:        ["Motorrad", "Yamaha", "Yamaha 5000ccm"],
             //userIdPublisher:    '',
             //userIdDonee:        '',
             articleCategoryId:  "mobility",

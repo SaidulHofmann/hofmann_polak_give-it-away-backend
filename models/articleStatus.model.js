@@ -9,8 +9,7 @@ const articleStatusSchema = mongoose.Schema(
         _id:        { type: String },
         name:       { type: String, reqiured: true, unique: true }
     },
-    { collection: 'articleStatus'},
-    { timestamps: true }
+    { collection: 'articleStatus', timestamps: true }
 );
 
 

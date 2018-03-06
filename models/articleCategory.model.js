@@ -9,8 +9,7 @@ const articleCategorySchema = mongoose.Schema(
         _id:        { type: String },
         name:       { type: String, reqiured: true, unique: true }
     },
-    { collection: 'articleCategories'},
-    { timestamps: true }
+    { collection: 'articleCategories', timestamps: true }
 );
 
 articleCategorySchema.plugin(mongoosePaginate);

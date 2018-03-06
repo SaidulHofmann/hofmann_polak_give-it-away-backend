@@ -10,8 +10,7 @@ const userSchema = mongoose.Schema(
         lastname:   { type: String, required: true }
 
     },
-    { collection: 'users'},
-    { timestamps: true }
+    { collection: 'users', timestamps: true }
 );
 
 

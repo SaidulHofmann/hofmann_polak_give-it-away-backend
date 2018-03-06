@@ -48,22 +48,19 @@ exports.getArticleById = async function (req, res, next) {
 
 exports.createArticle = async function (req, res, next) {
     try {
-        // Req.Body contains the form submit values.
-        let article = new Article(req.body);
-        let createdArticle = await ArticleService.createArticle(article);
+        let createdArticle = await ArticleService.createArticle(req.body);
         return res.status(201).json({status: 201, data: createdArticle, message: "Article created successfully."});
     } catch (ex) {
-        return res.status(400).json({status: 400, message: "Article could not be created."});
+        return res.status(400).json({status: 400, message: "Article could not be created. " +ex.message});
     }
 };
 
 exports.updateArticle = async function (req, res, next) {
     try {
-        let id = req.body._id;
-        if (!id) {
+        if (!req.body._id) {
             return res.status(400).json({status: 400, message: "Id must be present."});
         }
-        let updatedArticle = await ArticleService.updateArticle(id, req.body);
+        let updatedArticle = await ArticleService.updateArticle(req.body);
         return res.status(200).json({status: 200, data: updatedArticle, message: "Article updated successfully."});
     } catch (ex) {
         return res.status(400).json({status: 400, message: ex.message});

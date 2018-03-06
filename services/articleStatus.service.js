@@ -84,9 +84,9 @@ exports.deleteArticleStatus = async function (id) {
 
 exports.createInitialEntries = async function () {
     try {
-        this.createArticleStatus(new ArticleStatus({_id: 'available', name: 'Verfügbar'}));
-        this.createArticleStatus(new ArticleStatus({_id: 'handoverPending', name: 'Übergabe pendent'}));
-        this.createArticleStatus(new ArticleStatus({_id: 'donated', name: 'Verschenkt'}));
+        await this.createArticleStatus(new ArticleStatus({_id: 'available', name: 'Verfügbar'}));
+        await this.createArticleStatus(new ArticleStatus({_id: 'handoverPending', name: 'Übergabe pendent'}));
+        await this.createArticleStatus(new ArticleStatus({_id: 'donated', name: 'Verschenkt'}));
 
         console.log("ArticleStatus entries created successfully.");
     } catch(ex) {

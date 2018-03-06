@@ -84,16 +84,16 @@ exports.deleteArticleCategory = async function (id) {
 
 exports.createInitialEntries = async function () {
     try {
-        this.createArticleCategory(new ArticleCategory({_id: 'household', name: 'Haushalt'}));
-        this.createArticleCategory(new ArticleCategory({_id: 'garden', name: 'Garten '}));
-        this.createArticleCategory(new ArticleCategory({_id: 'mobility', name: 'Mobilität'}));
-        this.createArticleCategory(new ArticleCategory({_id: 'hygiene', name: 'Hygiene'}));
-        this.createArticleCategory(new ArticleCategory({_id: 'nutrition', name: 'Ernährung'}));
-        this.createArticleCategory(new ArticleCategory({_id: 'health', name: 'Gesundheit'}));
-        this.createArticleCategory(new ArticleCategory({_id: 'office', name: 'Bürobedarf'}));
-        this.createArticleCategory(new ArticleCategory({_id: 'leisure', name: 'Freizeit'}));
-        this.createArticleCategory(new ArticleCategory({_id: 'electronics', name: 'Elektronik'}));
-        this.createArticleCategory(new ArticleCategory({_id: 'others', name: 'Sonstiges'}));
+        await this.createArticleCategory(new ArticleCategory({_id: 'household', name: 'Haushalt'}));
+        await this.createArticleCategory(new ArticleCategory({_id: 'garden', name: 'Garten '}));
+        await this.createArticleCategory(new ArticleCategory({_id: 'mobility', name: 'Mobilität'}));
+        await this.createArticleCategory(new ArticleCategory({_id: 'hygiene', name: 'Hygiene'}));
+        await this.createArticleCategory(new ArticleCategory({_id: 'nutrition', name: 'Ernährung'}));
+        await this.createArticleCategory(new ArticleCategory({_id: 'health', name: 'Gesundheit'}));
+        await this.createArticleCategory(new ArticleCategory({_id: 'office', name: 'Bürobedarf'}));
+        await this.createArticleCategory(new ArticleCategory({_id: 'leisure', name: 'Freizeit'}));
+        await this.createArticleCategory(new ArticleCategory({_id: 'electronics', name: 'Elektronik'}));
+        await this.createArticleCategory(new ArticleCategory({_id: 'others', name: 'Sonstiges'}));
 
         console.log("ArticleCategory entries created successfully.");
     } catch(ex) {
