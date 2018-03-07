@@ -9,7 +9,7 @@ _this = this;
 exports.getReservations = async function (query, page, limit) {
     try {
         // Options setup for the mongoose paginate.
-        let options = {page, limit};
+        let options = {page: page, limit: limit, populate: Reservation.populateAllOptions };
         let reservations = await Reservation.paginate(query, options);
         return reservations;
     } catch (ex) {
@@ -19,7 +19,7 @@ exports.getReservations = async function (query, page, limit) {
 
 exports.getReservationById = async function (id) {
     try {
-        let foundReservation = await Reservation.findById(id);
+        let foundReservation = await Reservation.findById(id).populateAll();
         if (!foundReservation) { return false; }
         return foundReservation;
     } catch (ex) {
@@ -46,7 +46,7 @@ exports.createReservation = async function (jsonReservation) {
     try {
         let newReservation = new Reservation(jsonReservation);
         let savedReservation = await newReservation.save();
-        return savedReservation;
+        return Reservation.findById(savedReservation._id).populateAll();
     } catch (ex) {
         throw Error("Error while creating reservation. " + ex.message);
     }
@@ -60,7 +60,7 @@ exports.createReservation = async function (jsonReservation) {
 exports.updateReservation = async function (jsonReservation) {
     let oldReservation = null;
     try {
-        oldReservation = await Reservation.findById(jsonReservation._id);
+        oldReservation = await Reservation.findById(jsonReservation._id).populateAll();
         if (!oldReservation) { throw Error("Reservation could not be found."); }
     } catch (ex) {
         throw Error("Error occured while retrieving the reservation. " + ex.message);
@@ -77,7 +77,7 @@ exports.updateReservation = async function (jsonReservation) {
 exports.deleteReservation = async function (id) {
     let reservation = null;
     try {
-        reservation = await Reservation.findById(id);
+        reservation = await Reservation.findById(id).populateAll();
         if (!reservation) { throw Error("Reservation could not be found."); }
     } catch (ex) {
         throw Error("Error occured while retrieving the reservation. " + ex.message);
@@ -93,25 +93,25 @@ exports.deleteReservation = async function (id) {
 exports.createInitialEntries = async function () {
     try {
         await this.createReservation({
-            _id: '5a9e918a16b36024845a319b',
-            articleId: '5a9e4e65bdd7751e5033123f',
-            userId: '5a97bc25bba7ce18c0812d0a',
+            _id: '5aa04b1ac63b9823b81e4780',
+            article: '5a9e4e65bdd7751e5033123f',
+            user: '5a97bc25bba7ce18c0812d0a',
             commentPublisher: '',
             commentApplicant: 'Ich brauche das Motorrad für den Arbeitsweg.'
         });
 
         await this.createReservation({
-            _id: '5a9e918a16b36024845a319d',
-            articleId: '5a9e4e65bdd7751e50331240',
-            userId: '5a97bc25bba7ce18c0812d0a',
+            _id: '5aa04b1bc63b9823b81e4781',
+            article: '5a9e4e65bdd7751e50331240',
+            user: '5a97bc25bba7ce18c0812d0a',
             commentPublisher: '',
             commentApplicant: 'Ich bin ein Fan von Yamaha Motorräder.'
         });
 
         await this.createReservation({
-            _id: '5a9e918a16b36024845a319c',
-            articleId: '5a9e4e65bdd7751e50331241',
-            userId: '5a97c0bcbba7ce18c0812d0b',
+            _id: '5aa04b1bc63b9823b81e4782',
+            article: '5a9e4e65bdd7751e50331241',
+            user: '5a97c0bcbba7ce18c0812d0b',
             commentPublisher: 'Motorrad fahren ist nicht wirklich anstrengend. Es gibt bessere Aktivitäten um körperlich fit zu bleiben.',
             commentApplicant: 'Ich brauche Ausgleich zu meinem Büro Job.'
         });

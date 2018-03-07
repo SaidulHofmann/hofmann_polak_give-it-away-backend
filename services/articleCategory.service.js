@@ -29,12 +29,13 @@ exports.getArticleCategoryById = async function (id) {
 
 /**
  * Creates an articleCategory entry in the database.
- * @param articleCategory: new mongoose articleCategory object.
+ * @param jsonArticleCategory: ArticleCategory object, partial or complete, in json format.
  * @returns {Promise<*>}
  */
-exports.createArticleCategory = async function (articleCategory) {
+exports.createArticleCategory = async function (jsonArticleCategory) {
     try {
-        let savedArticleCategory= await articleCategory.save();
+        let newArticleCategory = new ArticleCategory(jsonArticleCategory);
+        let savedArticleCategory= await newArticleCategory.save();
         return savedArticleCategory;
     } catch (ex) {
         throw Error("Error while creating article category entry. " + ex.message);
@@ -43,22 +44,19 @@ exports.createArticleCategory = async function (articleCategory) {
 
 /**
  * Uodates an existing article category.
- * @param id : the id of the object to update.
- * @param params : http request body or json object.
+ * @param jsonArticleCategory : ArticleCategory object, partial or complete, in json format.
  * @returns {Promise<*>}
- * @remark : An articleCategory object cannot be used as input parameter
- * to update the old articleCategory object because of save conflict in mongoose.
  */
-exports.updateArticleCategory = async function (id, params) {
+exports.updateArticleCategory = async function (jsonArticleCategory) {
     let oldArticleCategory = null;
     try {
-        oldArticleCategory = await ArticleCategory.findById(id);
+        oldArticleCategory = await ArticleCategory.findById(jsonArticleCategory._id);
         if (!oldArticleCategory) { throw Error("Article category entry could not be found."); }
     } catch (ex) {
         throw Error("Error occured while retrieving the article category entry. " + ex.message);
     }
     try {
-        Object.assign(oldArticleCategory, params);
+        Object.assign(oldArticleCategory, jsonArticleCategory);
         let savedArticleCategory = await oldArticleCategory.save();
         return savedArticleCategory;
     } catch (ex) {
@@ -84,16 +82,16 @@ exports.deleteArticleCategory = async function (id) {
 
 exports.createInitialEntries = async function () {
     try {
-        await this.createArticleCategory(new ArticleCategory({_id: 'household', name: 'Haushalt'}));
-        await this.createArticleCategory(new ArticleCategory({_id: 'garden', name: 'Garten '}));
-        await this.createArticleCategory(new ArticleCategory({_id: 'mobility', name: 'Mobilität'}));
-        await this.createArticleCategory(new ArticleCategory({_id: 'hygiene', name: 'Hygiene'}));
-        await this.createArticleCategory(new ArticleCategory({_id: 'nutrition', name: 'Ernährung'}));
-        await this.createArticleCategory(new ArticleCategory({_id: 'health', name: 'Gesundheit'}));
-        await this.createArticleCategory(new ArticleCategory({_id: 'office', name: 'Bürobedarf'}));
-        await this.createArticleCategory(new ArticleCategory({_id: 'leisure', name: 'Freizeit'}));
-        await this.createArticleCategory(new ArticleCategory({_id: 'electronics', name: 'Elektronik'}));
-        await this.createArticleCategory(new ArticleCategory({_id: 'others', name: 'Sonstiges'}));
+        await this.createArticleCategory({_id: 'household', name: 'Haushalt'});
+        await this.createArticleCategory({_id: 'garden', name: 'Garten '});
+        await this.createArticleCategory({_id: 'mobility', name: 'Mobilität'});
+        await this.createArticleCategory({_id: 'hygiene', name: 'Hygiene'});
+        await this.createArticleCategory({_id: 'nutrition', name: 'Ernährung'});
+        await this.createArticleCategory({_id: 'health', name: 'Gesundheit'});
+        await this.createArticleCategory({_id: 'office', name: 'Bürobedarf'});
+        await this.createArticleCategory({_id: 'leisure', name: 'Freizeit'});
+        await this.createArticleCategory({_id: 'electronics', name: 'Elektronik'});
+        await this.createArticleCategory({_id: 'others', name: 'Sonstiges'});
 
         console.log("ArticleCategory entries created successfully.");
     } catch(ex) {

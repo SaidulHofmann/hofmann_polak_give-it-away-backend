@@ -29,12 +29,13 @@ exports.getArticleStatusById = async function (id) {
 
 /**
  * Creates an articleStatus entry in the database.
- * @param articleStatus: new mongoose articleStatus object.
+ * @param jsonArticleStatus: ArticleStatus object, partial or complete, in json format.
  * @returns {Promise<*>}
  */
-exports.createArticleStatus = async function (articleStatus) {
+exports.createArticleStatus = async function (jsonArticleStatus) {
     try {
-        let savedArticleStatus = await articleStatus.save();
+        let newArticleStatus = new Article(jsonArticleStatus);
+        let savedArticleStatus = await newArticleStatus.save();
         return savedArticleStatus;
     } catch (ex) {
         throw Error("Error while creating article status entry. " + ex.message);
@@ -43,22 +44,19 @@ exports.createArticleStatus = async function (articleStatus) {
 
 /**
  * Uodates an existing article status.
- * @param id : the id of the object to update.
- * @param params : http request body or json object.
+ * @param params : ArticleStatus object, partial or complete, in json format.
  * @returns {Promise<*>}
- * @remark : An articleStatus object cannot be used as input parameter
- * to update the old articleStatus object because of save conflict in mongoose.
  */
-exports.updateArticleStatus = async function (id, params) {
+exports.updateArticleStatus = async function (jsonArticleStatus) {
     let oldArticleStatus = null;
     try {
-        oldArticleStatus = await ArticleStatus.findById(id);
+        oldArticleStatus = await ArticleStatus.findById(jsonArticleStatus._id);
         if (!oldArticleStatus) { throw Error("ArticleStatus entry could not be found."); }
     } catch (ex) {
         throw Error("Error occured while retrieving the article status entry. " + ex.message);
     }
     try {
-        Object.assign(oldArticleStatus, params);
+        Object.assign(oldArticleStatus, jsonArticleStatus);
         let savedArticleStatus = await oldArticleStatus.save();
         return savedArticleStatus;
     } catch (ex) {
@@ -84,9 +82,9 @@ exports.deleteArticleStatus = async function (id) {
 
 exports.createInitialEntries = async function () {
     try {
-        await this.createArticleStatus(new ArticleStatus({_id: 'available', name: 'Verfügbar'}));
-        await this.createArticleStatus(new ArticleStatus({_id: 'handoverPending', name: 'Übergabe pendent'}));
-        await this.createArticleStatus(new ArticleStatus({_id: 'donated', name: 'Verschenkt'}));
+        await this.createArticleStatus({_id: 'available', name: 'Verfügbar'});
+        await this.createArticleStatus({_id: 'handoverPending', name: 'Übergabe pendent'});
+        await this.createArticleStatus({_id: 'donated', name: 'Verschenkt'});
 
         console.log("ArticleStatus entries created successfully.");
     } catch(ex) {

@@ -6,19 +6,28 @@ const ObjectId = mongoose.Schema.ObjectId;
 
 const reservationSchema = mongoose.Schema(
     {
-        articleId:              { type: ObjectId },
-        userId:                 { type: ObjectId },
+        article:                { type: ObjectId, ref: 'Article' },
+        user:                   { type: ObjectId, ref: 'User' },
         commentPublisher:       { type: String },
         commentApplicant:       { type: String }
     },
     { collection: 'reservations', timestamps: true }
 );
 
-reservationSchema.index({ articleId: 1, userId: 1 }, { unique: true });
+reservationSchema.index({ article: 1, user: 1 }, { unique: true });
+
+reservationSchema.statics.populateAllOptions = [
+    { path: 'article' },
+    { path: 'user', select: 'firstname lastname' },
+];
+
+reservationSchema.query.populateAll = function() {
+    return this.populate(this.model.populateAllOptions);
+};
 
 reservationSchema.statics.findByUserIdAndArticleId = async function (userId, articleId) {
     try {
-        let reservation = await this.findOne({userId: userId, articleId: articleId});
+        let reservation = await this.findOne({user: userId, article: articleId}).populateAll();
         if (!reservation) { return false; }
         return reservation;
     } catch (ex) {

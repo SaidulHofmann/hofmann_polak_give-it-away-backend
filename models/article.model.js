@@ -15,13 +15,25 @@ const articleSchema = mongoose.Schema(
         tags:                   { type: [String] },
         donationDate:           { type: Date },
 
-        userIdPublisher:        { type: ObjectId }, // required
-        userIdDonee:            { type: ObjectId },
-        articleCategoryId:      { type: String }, // required
-        articleStatusId:        { type: String } // required
+        publisher:              { type: ObjectId, ref: 'User' }, // required
+        donee:                  { type: ObjectId, ref: 'User' },
+        category:               { type: String, ref: 'ArticleCategory' }, // required
+        status:                 { type: String, ref: 'ArticleStatus' } // required
     },
     { collection: 'articles', timestamps: true }
 );
+
+articleSchema.statics.populateAllOptions = [
+    { path: 'publisher', select: 'firstname lastname' },
+    { path: 'donee', select: 'firstname lastname' },
+    { path: 'category', select: 'name' },
+    { path: 'status', select: 'name' },
+];
+
+articleSchema.query.populateAll = function() {
+    return this.populate(this.model.populateAllOptions);
+};
+
 
 articleSchema.plugin(mongoosePaginate);
 module.exports = mongoose.model('Article', articleSchema);

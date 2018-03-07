@@ -43,4 +43,26 @@ function User(email, passwort) {
 
 module.exports = {add: publicRegisterUser, authenticate: publicAuthentication};
 */
-module.exports = {createUser: publicRegisterUser};
+
+function createInitialEntries() {
+    try {
+        this.createUser({
+            email: 'testuser1@testuser.com',
+            password: 'Hans',
+            firstname: 'Hans',
+            lastname: 'Muster'
+        });
+        this.createUser({
+            email: 'testuser2@testuser.com',
+            password: 'Felix',
+            firstname: 'Felix',
+            lastname: 'Meier'
+        });
+
+        console.log("User entries created successfully.");
+    } catch(ex) {
+        throw Error("Error while creating initial entries for user. " + ex.message);
+    }
+};
+
+module.exports = {createUser: publicRegisterUser, createInitialEntries: createInitialEntries };
