@@ -1,6 +1,7 @@
 // User model with definition of collection, document schema and functions.
 
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate');
 
 const userSchema = mongoose.Schema(
     {
@@ -13,5 +14,5 @@ const userSchema = mongoose.Schema(
     { collection: 'users', timestamps: true }
 );
 
-
+userSchema.plugin(mongoosePaginate);
 module.exports = mongoose.model('User', userSchema);

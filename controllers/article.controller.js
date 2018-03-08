@@ -1,7 +1,6 @@
-/* Article controller. Handles article api requests. */
+// Article controller. Handles article api requests.
 
 const ArticleService = require('../services/article.service');
-const Article = require('../models/article.model');
 
 // Save the context of this module.
 _this = this;

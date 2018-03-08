@@ -1,4 +1,4 @@
-/* User service. Contains CRUD operations and business logic functions. */
+// User service. Contains CRUD operations and business logic functions.
 
 const crypto = require('crypto');
 const cryptoUtil = require('../util/cryptoUtil');
@@ -44,6 +44,27 @@ function User(email, passwort) {
 module.exports = {add: publicRegisterUser, authenticate: publicAuthentication};
 */
 
+async function getUsers (query, page, limit) {
+    try {
+        // Options setup for the mongoose paginate.
+        let options = {page: page, limit: limit };
+        let users = await User.paginate(query, options);
+        return users;
+    } catch (ex) {
+        throw Error('Error while paginating users. ' + ex.message);
+    }
+};
+
+async function getUserById (id) {
+    try {
+        let foundUser = await User.findById(id);
+        if (!foundUser) { return false; }
+        return foundUser;
+    } catch (ex) {
+        throw Error("Error occured while retrieving the user. " + ex.message);
+    }
+};
+
 function createInitialEntries() {
     try {
         this.createUser({
@@ -65,4 +86,9 @@ function createInitialEntries() {
     }
 };
 
-module.exports = {createUser: publicRegisterUser, createInitialEntries: createInitialEntries };
+module.exports = {
+    createUser: publicRegisterUser,
+    getUsers: getUsers,
+    getUserById: getUserById,
+    createInitialEntries: createInitialEntries
+};
