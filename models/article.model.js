@@ -12,7 +12,7 @@ const articleSchema = mongoose.Schema(
         pictureOverview:        { type: String }, // required
         pictures:               { type: [String] },
         videos:                 { type: [String] },
-        tags:                   { type: [String] },
+        tags:                   { type: String },
         donationDate:           { type: Date },
 
         publisher:              { type: ObjectId, ref: 'User' }, // required

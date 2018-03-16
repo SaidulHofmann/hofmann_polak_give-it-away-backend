@@ -1,5 +1,6 @@
 /* Article service. Contains CRUD operations and business logic functions. */
 
+const mongoose = require('mongoose');
 const Article = require('../models/article.model');
 
 // Save the context of this module.
@@ -35,6 +36,7 @@ exports.getArticleById = async function (id) {
 exports.createArticle = async function (jsonArticle) {
     try {
         let newArticle = new Article(jsonArticle);
+        if(!newArticle._id) { newArticle._id = mongoose.Types.ObjectId(); }
         let savedArticle = await newArticle.save();
         return Article.findById(savedArticle._id).populateAll();
     } catch (ex) {
@@ -97,7 +99,7 @@ exports.createInitialEntries = async function () {
                 "https://i.ytimg.com/vi/51h-ESZqIKg/maxresdefault.jpg"
                                 ],
             videos:             [],
-            tags:               ["Motorrad", "Yamaha", "Yamaha 1000ccm"],
+            tags:               "Motorrad, Yamaha, Yamaha 1000ccm",
             donationDate:       null,
 
             publisher:          '5aa00063b382de1478501ccd',
@@ -121,7 +123,7 @@ exports.createInitialEntries = async function () {
                 "https://i.ytimg.com/vi/51h-ESZqIKg/maxresdefault.jpg"
             ],
             videos:             [],
-            tags:               ["Motorrad", "Yamaha", "Yamaha 2000ccm"],
+            tags:               "Motorrad, Yamaha, Yamaha 2000ccm",
             donationDate:       null,
 
             publisher:          '',
@@ -145,7 +147,7 @@ exports.createInitialEntries = async function () {
                 "https://i.ytimg.com/vi/51h-ESZqIKg/maxresdefault.jpg"
             ],
             videos:             [],
-            tags:               ["Motorrad", "Yamaha", "Yamaha 3000"],
+            tags:               "Motorrad, Yamaha, Yamaha 3000",
             donationDate:       null,
 
             publisher:          '',
@@ -169,7 +171,7 @@ exports.createInitialEntries = async function () {
                 "https://i.ytimg.com/vi/51h-ESZqIKg/maxresdefault.jpg"
             ],
             videos:             [],
-            tags:               ["Motorrad", "Yamaha", "Yamaha 4000ccm"],
+            tags:               "Motorrad, Yamaha, Yamaha 4000ccm",
             donationDate:       null,
 
             publisher:          '',
@@ -193,7 +195,7 @@ exports.createInitialEntries = async function () {
                 "https://i.ytimg.com/vi/51h-ESZqIKg/maxresdefault.jpg"
             ],
             videos:             [],
-            tags:               ["Motorrad", "Yamaha", "Yamaha 5000ccm"],
+            tags:               "Motorrad, Yamaha, Yamaha 5000ccm",
             donationDate:       null,
 
             publisher:          '',
