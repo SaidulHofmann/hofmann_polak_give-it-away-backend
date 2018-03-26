@@ -1,4 +1,4 @@
-/* Article service. Contains CRUD operations and business logic functions. */
+// Article service. Contains CRUD operations and business logic functions.
 
 const mongoose = require('mongoose');
 const Article = require('../models/article.model');
@@ -7,10 +7,26 @@ const Article = require('../models/article.model');
 _this = this;
 
 
-exports.getArticles = async function (query, page, limit) {
+exports.getArticles = async function (jsonParams) {
+    const unfiltered = new RegExp('.*');
     try {
-        // Options setup for the mongoose paginate.
-        let options = {page: page, limit: limit, populate: Article.populateAllOptions };
+        let query = {
+            name:       jsonParams.name ? new RegExp(jsonParams.name, 'i') : unfiltered,
+            category:   jsonParams.category ?   jsonParams.category !== 'undefined' ? jsonParams.category : unfiltered    : unfiltered,
+            status:     jsonParams.status ?   jsonParams.status !== 'undefined' ? jsonParams.status : unfiltered    : unfiltered,
+            tags:       jsonParams.tags ? new RegExp(jsonParams.tags, 'i') : unfiltered
+        };
+
+        let options = {
+            page:       jsonParams.page ? +jsonParams.page : 1,
+            limit:      jsonParams.limit ? +jsonParams.limit : 10,
+            sort:       jsonParams.sort ?    jsonParams.sort !== 'undefined' ? jsonParams.sort : {}    : {},
+            populate:   Article.populateAllOptions
+        };
+
+        console.log('query: ', query);
+        console.log('options: ', options);
+
         let articles = await Article.paginate(query, options);
         return articles;
     } catch (ex) {
