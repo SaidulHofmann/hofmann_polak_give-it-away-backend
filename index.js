@@ -14,7 +14,8 @@ const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const databaseConnectionUrl = 'mongodb://admin:admin@ds141068.mlab.com:41068/giveitaway';
+//const databaseConnectionUrl = 'mongodb://admin:admin@ds141068.mlab.com:41068/giveitaway';
+const databaseConnectionUrl = 'mongodb://localhost/giveitaway';
 //const jwt = require('express-jwt');
 //const jwtSecret = 'aklsdjfklöasjdcma8sd90mcklasdföasdf$ädasöfü pi340qkrlöam,dflöäasf';
 
@@ -28,11 +29,6 @@ const databaseConnectionUrl = 'mongodb://admin:admin@ds141068.mlab.com:41068/giv
 
 // Database Connection
 //-----------------------------------------------------------------------------
-
-//Test
-//const ArticleService = require('./services/article.service');
-//const ReservationService = require('./services/reservation.service');
-
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 mongoose.connect(databaseConnectionUrl);
@@ -41,9 +37,10 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
     console.log('Database is connected');
-    //Test
+    // Create initial db entries
     // try {
-    //     ArticleService.createInitialEntries();
+    //     const dataModel = require('./models/data.model');
+    //     dataModel.createInitialDbEntries();
     // } catch(ex){
     //     console.log(ex.message);
     // }

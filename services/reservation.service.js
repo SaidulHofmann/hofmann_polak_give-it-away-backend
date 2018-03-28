@@ -90,7 +90,7 @@ exports.deleteReservation = async function (id) {
     }
 };
 
-exports.createInitialEntries = async function () {
+exports.createInitialDbEntries = async function () {
     try {
         await this.createReservation({
             _id: '5aa04b1ac63b9823b81e4780',
@@ -118,7 +118,7 @@ exports.createInitialEntries = async function () {
 
         console.log("Reservation entries created successfully.");
     } catch(ex) {
-        throw Error("Error while creating initial values for reservations. " + ex.message);
+        throw Error("Error while creating initial entries for reservations. " + ex.message);
     }
 };
 

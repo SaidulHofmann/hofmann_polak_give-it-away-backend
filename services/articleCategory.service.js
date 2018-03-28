@@ -80,8 +80,9 @@ exports.deleteArticleCategory = async function (id) {
     }
 };
 
-exports.createInitialEntries = async function () {
+exports.createInitialDbEntries = async function () {
     try {
+        await this.createArticleCategory({_id: 'others', name: 'Sonstiges'});
         await this.createArticleCategory({_id: 'household', name: 'Haushalt'});
         await this.createArticleCategory({_id: 'garden', name: 'Garten '});
         await this.createArticleCategory({_id: 'mobility', name: 'Mobilität'});
@@ -91,10 +92,9 @@ exports.createInitialEntries = async function () {
         await this.createArticleCategory({_id: 'office', name: 'Bürobedarf'});
         await this.createArticleCategory({_id: 'leisure', name: 'Freizeit'});
         await this.createArticleCategory({_id: 'electronics', name: 'Elektronik'});
-        await this.createArticleCategory({_id: 'others', name: 'Sonstiges'});
 
         console.log("ArticleCategory entries created successfully.");
     } catch(ex) {
-        throw Error("Error while creating initial values for article category. " + ex.message);
+        throw Error("Error while creating initial entries for article category. " + ex.message);
     }
 };

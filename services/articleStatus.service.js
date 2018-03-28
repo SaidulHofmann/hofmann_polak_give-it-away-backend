@@ -34,7 +34,7 @@ exports.getArticleStatusById = async function (id) {
  */
 exports.createArticleStatus = async function (jsonArticleStatus) {
     try {
-        let newArticleStatus = new Article(jsonArticleStatus);
+        let newArticleStatus = new ArticleStatus(jsonArticleStatus);
         let savedArticleStatus = await newArticleStatus.save();
         return savedArticleStatus;
     } catch (ex) {
@@ -80,14 +80,14 @@ exports.deleteArticleStatus = async function (id) {
     }
 };
 
-exports.createInitialEntries = async function () {
+exports.createInitialDbEntries = async function () {
     try {
-        await this.createArticleStatus({_id: 'available', name: 'Verfügbar'});
+        await this.createArticleStatus({_id: 'available', name: 'Artikel verfügbar'});
         await this.createArticleStatus({_id: 'handoverPending', name: 'Übergabe pendent'});
-        await this.createArticleStatus({_id: 'donated', name: 'Verschenkt'});
+        await this.createArticleStatus({_id: 'donated', name: 'Artikel verschenkt'});
 
         console.log("ArticleStatus entries created successfully.");
     } catch(ex) {
-        throw Error("Error while creating initial values for article status. " + ex.message);
+        throw Error("Error while creating initial entries for article status. " + ex.message);
     }
 };

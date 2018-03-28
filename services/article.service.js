@@ -98,7 +98,7 @@ exports.deleteArticle = async function (id) {
     }
 };
 
-exports.createInitialEntries = async function () {
+exports.createInitialDbEntries = async function () {
     try {
         // Article 1
         await this.createArticle(new Article({
@@ -118,7 +118,7 @@ exports.createInitialEntries = async function () {
             tags:               "Motorrad, Yamaha, Yamaha 1000ccm",
             donationDate:       null,
 
-            publisher:          '5aa00063b382de1478501ccd',
+            publisher:          '5abc0267d608821850991037',
             donee:              null,
             category:           "mobility",
             status:             "available"
@@ -142,7 +142,7 @@ exports.createInitialEntries = async function () {
             tags:               "Motorrad, Yamaha, Yamaha 2000ccm",
             donationDate:       null,
 
-            publisher:          '',
+            publisher:          '5abc0267d608821850991037',
             donee:              '',
             category:           "mobility",
             status:             "available"
@@ -166,7 +166,7 @@ exports.createInitialEntries = async function () {
             tags:               "Motorrad, Yamaha, Yamaha 3000",
             donationDate:       null,
 
-            publisher:          '',
+            publisher:          '5abc0267d608821850991037',
             donee:              '',
             category:           "mobility",
             status:             "available"
@@ -190,7 +190,7 @@ exports.createInitialEntries = async function () {
             tags:               "Motorrad, Yamaha, Yamaha 4000ccm",
             donationDate:       null,
 
-            publisher:          '',
+            publisher:          '5abc0267d608821850991038',
             donee:              '',
             category:           "mobility",
             status:             "available"
@@ -214,7 +214,7 @@ exports.createInitialEntries = async function () {
             tags:               "Motorrad, Yamaha, Yamaha 5000ccm",
             donationDate:       null,
 
-            publisher:          '',
+            publisher:          '5abc0267d608821850991038',
             donee:              '',
             category:           "mobility",
             status:             "available"

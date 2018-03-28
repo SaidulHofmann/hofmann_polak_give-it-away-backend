@@ -65,15 +65,17 @@ async function getUserById (id) {
     }
 };
 
-function createInitialEntries() {
+function createInitialDbEntries() {
     try {
         this.createUser({
+            _id: '5abc0267d608821850991037',
             email: 'testuser1@testuser.com',
             password: 'Hans',
             firstname: 'Hans',
             lastname: 'Muster'
         });
         this.createUser({
+            _id: '5abc0267d608821850991038',
             email: 'testuser2@testuser.com',
             password: 'Felix',
             firstname: 'Felix',
@@ -90,5 +92,5 @@ module.exports = {
     createUser: publicRegisterUser,
     getUsers: getUsers,
     getUserById: getUserById,
-    createInitialEntries: createInitialEntries
+    createInitialDbEntries: createInitialDbEntries
 };
