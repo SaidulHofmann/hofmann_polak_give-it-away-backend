@@ -11,22 +11,17 @@ exports.getArticles = async function (jsonParams) {
     const unfiltered = new RegExp('.*');
     try {
         let query = {
-            name:       jsonParams.name ? new RegExp(jsonParams.name, 'i') : unfiltered,
+            name:       jsonParams.name ? jsonParams.name : unfiltered,
             category:   jsonParams.category ?   jsonParams.category !== 'undefined' ? jsonParams.category : unfiltered    : unfiltered,
             status:     jsonParams.status ?   jsonParams.status !== 'undefined' ? jsonParams.status : unfiltered    : unfiltered,
             tags:       jsonParams.tags ? new RegExp(jsonParams.tags, 'i') : unfiltered
         };
-
         let options = {
             page:       jsonParams.page ? +jsonParams.page : 1,
             limit:      jsonParams.limit ? +jsonParams.limit : 10,
             sort:       jsonParams.sort ?    jsonParams.sort !== 'undefined' ? jsonParams.sort : {}    : {},
             populate:   Article.populateAllOptions
         };
-
-        console.log('query: ', query);
-        console.log('options: ', options);
-
         let articles = await Article.paginate(query, options);
         return articles;
     } catch (ex) {

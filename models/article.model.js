@@ -7,12 +7,12 @@ const ObjectId = mongoose.Schema.ObjectId;
 const articleSchema = mongoose.Schema(
     {
         name:                   { type: String, required: true, index: true, trim: true },
-        description:            { type: String, required: true },
-        handover:               { type: String, required: true },
-        pictureOverview:        { type: String }, // required
+        description:            { type: String, required: true, trim: true },
+        handover:               { type: String, required: true, trim: true },
+        pictureOverview:        { type: String, trim: true}, // required
         pictures:               { type: [String] },
         videos:                 { type: [String] },
-        tags:                   { type: String },
+        tags:                   { type: String, trim: true },
         donationDate:           { type: Date },
 
         publisher:              { type: ObjectId, ref: 'User', required: true },

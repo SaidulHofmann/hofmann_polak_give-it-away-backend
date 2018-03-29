@@ -14,8 +14,6 @@ const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-//const databaseConnectionUrl = 'mongodb://admin:admin@ds141068.mlab.com:41068/giveitaway';
-const databaseConnectionUrl = 'mongodb://localhost/giveitaway';
 //const jwt = require('express-jwt');
 //const jwtSecret = 'aklsdjfklöasjdcma8sd90mcklasdföasdf$ädasöfü pi340qkrlöam,dflöäasf';
 
@@ -29,6 +27,9 @@ const databaseConnectionUrl = 'mongodb://localhost/giveitaway';
 
 // Database Connection
 //-----------------------------------------------------------------------------
+//const databaseConnectionUrl = 'mongodb://admin:admin@ds141068.mlab.com:41068/giveitaway';
+const databaseConnectionUrl = 'mongodb://localhost/giveitaway';
+
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 mongoose.connect(databaseConnectionUrl);
@@ -52,7 +53,7 @@ app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, '/../give-it-away-frontend/dist')));
+app.use(express.static(path.join(__dirname, '/../hofmann_polak_give-it-away-frontend/dist-prod')));
 
 
 // Routing
@@ -60,7 +61,7 @@ app.use(express.static(path.join(__dirname, '/../give-it-away-frontend/dist')));
 
 // CORS configuration - add headers.
 app.use(function (req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
+    res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
 
@@ -72,9 +73,9 @@ app.use(function (req, res, next) {
 
 // User and general routes.
 //-------------------------
-// app.get("/", function (req, res) {
-//     res.sendFile("index.html", {root: __dirname + '/../hofmann_polak_give-it-away-frontend/dist/'});
-// });
+app.get("/", function (req, res) {
+    res.sendFile("index.html", {root: __dirname + '/../hofmann_polak_give-it-away-frontend/dist-prod/'});
+});
 app.use("/users", require('./routes/user.route'));
 //app.use(jwt(app.get("jwt-validate"))); //after this middleware a token is required!
 
