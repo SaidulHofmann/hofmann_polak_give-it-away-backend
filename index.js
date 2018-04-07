@@ -35,9 +35,9 @@ mongoose.Promise = global.Promise;
 mongoose.connect(databaseConnectionUrl);
 require('./models/index.model.js');
 const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
+db.on('error', console.error.bind(console, 'Database connection error:'));
 db.once('open', function() {
-    console.log('Database is connected');
+    console.log('Connected to Database.');
     // Create initial db entries
     // try {
     //     const dataModel = require('./models/data.model');

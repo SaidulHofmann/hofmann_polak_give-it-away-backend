@@ -30,7 +30,7 @@ https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/
 
 - Im Backend ist der Connection String für die Nutzung der lokalen Installation definiert. Bei abweichender Installation den Connection String gemäss Punkt 2.1 anpassen.
 
-Tipp: Die Installation kann hängen bleiben. Grund: Die Compass Installation (DB Management-Interface) wird per powershell gestartet und bleibt dabei hängen. Im Windows Task Manager kann Powershell beendet werden. Danach die Installation ohne die Auswahl von Compüass durchführen und Compass bei Bedarf nachträglich installieren.
+Tipp: Die Installation kann hängen bleiben. Grund: Die Compass Installation (DB Management-Interface) wird per powershell gestartet und bleibt dabei hängen. Im Windows Task Manager kann Powershell beendet werden. Danach die Installation ohne die Auswahl von Compass durchführen und Compass bei Bedarf nachträglich installieren.
 
 
 3.0 - Laden der Initialdaten in die Datenbank
