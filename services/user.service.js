@@ -7,16 +7,14 @@ const User = require('../models/user.model');
 
 
 
-
-
-function publicRegisterUser(userParam, callback) {
-
-    let user = new User(userParam);
-    user.save ( function (err, newDoc) {
-        if (callback) {
-            callback(err, newDoc);
-        }
-    });
+async function publicRegisterUser(jsonUser) {
+    try {
+        let newUser = new User(jsonUser);
+        let savedUser = await newUser.save();
+        return savedUser;
+    } catch (ex) {
+        throw Error("Error occured while creating the user. " + ex.message);
+    }
 }
 
 /*

@@ -6,7 +6,7 @@ const ArticleService = require('../services/article.service');
 _this = this;
 
 
-exports.getArticles = async function (req, res, next) {
+exports.getArticles = async function (req, res) {
     try {
          let articles = await ArticleService.getArticles(req.query);
          return res.status(200).json({status: 200, data: articles, message: "Articles received successfully."});
@@ -15,7 +15,7 @@ exports.getArticles = async function (req, res, next) {
     }
 };
 
-exports.getArticleById = async function (req, res, next) {
+exports.getArticleById = async function (req, res) {
     try {
         let id = req.params.id;
         if (!id) {
@@ -31,7 +31,7 @@ exports.getArticleById = async function (req, res, next) {
     }
 };
 
-exports.createArticle = async function (req, res, next) {
+exports.createArticle = async function (req, res) {
     try {
         let createdArticle = await ArticleService.createArticle(req.body);
         return res.status(201).json({status: 201, data: createdArticle, message: "Article created successfully."});
@@ -40,7 +40,7 @@ exports.createArticle = async function (req, res, next) {
     }
 };
 
-exports.updateArticle = async function (req, res, next) {
+exports.updateArticle = async function (req, res) {
     try {
         if (!req.body._id) {
             return res.status(400).json({status: 400, message: "Id must be present."});
@@ -52,7 +52,7 @@ exports.updateArticle = async function (req, res, next) {
     }
 };
 
-exports.deleteArticle = async function (req, res, next) {
+exports.deleteArticle = async function (req, res) {
     try {
         let id = req.params.id;
         if (!id) {

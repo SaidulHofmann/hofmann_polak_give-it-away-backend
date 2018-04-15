@@ -2,10 +2,10 @@
 
 
 const UserService = require('../services/user.service');
-// const util = require("../util/security");
+const util = require("../util/security");
 
 
-exports.getUsers = async function (req, res, next) {
+exports.getUsers = async function (req, res) {
     try {
         // Check the existence of the query parameters. If they don't exist, assign a default value.
         let page = req.query.page ? req.query.page : 1;
@@ -18,7 +18,7 @@ exports.getUsers = async function (req, res, next) {
     }
 };
 
-exports.getUserById = async function (req, res, next) {
+exports.getUserById = async function (req, res) {
     try {
         if (!req.params.id) {
             return res.status(400).json({status: 400, message: "Id must be present."});
@@ -33,15 +33,17 @@ exports.getUserById = async function (req, res, next) {
     }
 };
 
-exports.createUser = function (req, res) {
-    let register = UserService.createUser(req.body, function (err,register) {
-        res.json(register)
-    });
+exports.createUser = async function (req, res) {
+    try {
+        let createdUser = await UserService.createUser(req.body);
+        return res.status(201).json({status: 201, data: createdUser, message: "User created successfully."});
+    } catch (ex) {
+        return res.status(400).json({status: 400, message: "User could not be created. " +ex.message});
+    }
 };
 
-
-
-
-
-
-
+exports.login = async function (req, res) {
+    console.log('@UserController.login()');
+    console.log('body: ', + req.body);
+    return res.status(400).json({status: 400, message: "Login not implemented. "});
+};

@@ -76,7 +76,7 @@ app.use(function (req, res, next) {
 app.get("/", function (req, res) {
     res.sendFile("index.html", {root: __dirname + '/../hofmann_polak_give-it-away-frontend/dist-prod/'});
 });
-app.use("/users", require('./routes/user.route'));
+app.use("/", require('./routes/user.route'));
 //app.use(jwt(app.get("jwt-validate"))); //after this middleware a token is required!
 
 
