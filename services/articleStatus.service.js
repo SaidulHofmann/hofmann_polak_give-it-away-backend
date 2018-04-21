@@ -1,6 +1,6 @@
 /* Article status service. Contains CRUD operations and business logic functions. */
 
-const ArticleStatus = require('../models/articleStatus.model');
+const ArticleStatus = new require('../models/articleStatus.model');
 
 // Save the context of this module.
 _this = this;

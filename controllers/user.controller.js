@@ -7,7 +7,6 @@ const util = require("../util/security");
 
 exports.getUsers = async function (req, res) {
     try {
-        // Check the existence of the query parameters. If they don't exist, assign a default value.
         let page = req.query.page ? req.query.page : 1;
         let limit = req.query.limit ? req.query.limit : 10;
 
@@ -43,7 +42,10 @@ exports.createUser = async function (req, res) {
 };
 
 exports.login = async function (req, res) {
-    console.log('@UserController.login()');
-    console.log('body: ', + req.body);
-    return res.status(400).json({status: 400, message: "Login not implemented. "});
+    try {
+        util.handleLogin(req, res);
+    } catch (ex) {
+        return res.status(400).json({status: 400, message: "Error processing login."});
+    }
+
 };

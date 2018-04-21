@@ -1,6 +1,6 @@
 /* Reservation service. Contains CRUD operations and business logic functions. */
 
-const Reservation = require('../models/reservation.model');
+const Reservation = new require('../models/reservation.model');
 
 // Save the context of this module.
 _this = this;

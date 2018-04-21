@@ -14,15 +14,15 @@ const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-//const jwt = require('express-jwt');
-//const jwtSecret = 'aklsdjfklöasjdcma8sd90mcklasdföasdf$ädasöfü pi340qkrlöam,dflöäasf';
+const jwt = require('express-jwt');
+const jwtSecret = 'aklsdjfklöasjdcma8sd90mcklasdföasdf$ädasöfü pi340qkrlöam,dflöäasf';
 
 
 // Aplication settings
 //-----------------------------------------------------------------------------
-//app.set("jwt-secret", jwtSecret); //secret should be in a config file - or better be a private key!
-//app.set("jwt-sign", {expiresIn: "1d", audience: "self", issuer: "myself"});
-//app.set("jwt-validate", {secret: jwtSecret, audience: "self", issuer: "myself"});
+app.set("jwt-secret", jwtSecret); //secret should be in a config file - or better be a private key!
+app.set("jwt-sign", {expiresIn: "1d", audience: "self", issuer: "myself"});
+app.set("jwt-validate", {secret: jwtSecret, audience: "self", issuer: "myself"});
 
 
 // Database Connection
@@ -63,7 +63,7 @@ app.use(express.static(path.join(__dirname, '/../hofmann_polak_give-it-away-fron
 app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    res.setHeader('Access-Control-Allow-Headers', 'authorization, Content-Type, Accept, Origin, X-Requested-With');
 
     // Set to true if you need the website to include cookies in the requests sent
     // to the API (e.g. in case you use sessions)
@@ -77,7 +77,7 @@ app.get("/", function (req, res) {
     res.sendFile("index.html", {root: __dirname + '/../hofmann_polak_give-it-away-frontend/dist-prod/'});
 });
 app.use("/", require('./routes/user.route'));
-//app.use(jwt(app.get("jwt-validate"))); //after this middleware a token is required!
+app.use(jwt(app.get("jwt-validate"))); //after this middleware a token is required!
 
 
 // API routes for all routes matching /api.

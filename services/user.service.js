@@ -2,14 +2,14 @@
 
 const crypto = require('crypto');
 const cryptoUtil = require('../util/cryptoUtil');
-
-const User = require('../models/user.model');
-
+const mongoose = require('mongoose');
+const User = new require('../models/user.model');
 
 
 async function publicRegisterUser(jsonUser) {
     try {
         let newUser = new User(jsonUser);
+        newUser.password = cryptoUtil.hashPwd(jsonUser.password);
         let savedUser = await newUser.save();
         return savedUser;
     } catch (ex) {
@@ -17,30 +17,14 @@ async function publicRegisterUser(jsonUser) {
     }
 }
 
-/*
 function publicAuthentication(email, passwort, callback) {
     if (!(email && passwort)) {
         callback(false);
     }
-
-
-    db.findOne({email: email}, function (err, doc) {
-        if (doc == null && !err) {
-            publicRegisterUser(email, passwort, callback);
-        }
-        else {
-            callback(err, doc && doc.passwortHash == cryptoUtil.hashPwd(passwort));
-        }
+    User.findOne({email: email}, function (err, user) {
+        callback(err, user, user && user.password == cryptoUtil.hashPwd(passwort));
     });
 }
-
-function User(email, passwort) {
-    this.email = email;
-    this.passwortHash = cryptoUtil.hashPwd(passwort);
-}
-
-module.exports = {add: publicRegisterUser, authenticate: publicAuthentication};
-*/
 
 async function getUsers (query, page, limit) {
     try {
@@ -88,6 +72,7 @@ function createInitialDbEntries() {
 
 module.exports = {
     createUser: publicRegisterUser,
+    authenticate: publicAuthentication,
     getUsers: getUsers,
     getUserById: getUserById,
     createInitialDbEntries: createInitialDbEntries

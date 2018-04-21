@@ -1,6 +1,6 @@
 /* Article category service. Contains CRUD operations and business logic functions. */
 
-const ArticleCategory = require('../models/articleCategory.model');
+const ArticleCategory = new require('../models/articleCategory.model');
 
 // Save the context of this module.
 _this = this;

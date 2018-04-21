@@ -1,7 +1,7 @@
 // Article service. Contains CRUD operations and business logic functions.
 
 const mongoose = require('mongoose');
-const Article = require('../models/article.model');
+const Article = new require('../models/article.model');
 
 // Save the context of this module.
 _this = this;
