@@ -19,11 +19,11 @@ function currentUser(req) {
 }
 
 
-function createSessionToken(email, secret, options, callback) {
-    if (!email) {
+function createSessionToken(user, secret, options, callback) {
+    if (!user) {
         return "";
     }
-    jwt.sign({email}, secret, options, (err, token) => callback(token));
+    jwt.sign({email: user.email, _id: user._id}, secret, options, (err, token) => callback(token));
 }
 
 function handleLogin(req, res) {
@@ -33,7 +33,7 @@ function handleLogin(req, res) {
     else {
         userService.authenticate(req.body.email, req.body.pwd, function (err, user, valid) {
             if (valid) {
-                createSessionToken(req.body.email,
+                createSessionToken(user,
                     req.app.get("jwt-secret"),
                     req.app.get("jwt-sign"),
                     (token) => {

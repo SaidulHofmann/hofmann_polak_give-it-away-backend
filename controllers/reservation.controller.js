@@ -9,23 +9,14 @@ _this = this;
 
 exports.getReservations = async function (req, res, next) {
     try {
-        let reservations = null;
-        // Check the existence of the query parameters. If they don't exist, assign a default value.
-        let page = req.query.page ? req.query.page : 1;
-        let limit = req.query.limit ? req.query.limit : 10;
-        let userId = req.query.userId;
-        let articleId = req.query.articleId;
-
-        // Search by articleId and userId.
-        if (userId && articleId) {
-            reservations = await ReservationService.getReservationByUserIdAndArticleId(userId, articleId);
-            if (!reservations) {
+        let reservations = await ReservationService.getReservations(req.query);
+        if(!reservations) {
+            if(req.query.userId && req.query.articleId) {
                 return res.status(404).json({status: 404, message: "Reservation could not be found."});
             }
-        }
-        // Return reservations unfiltered.
-        else {
-            reservations = await ReservationService.getReservations({}, page, limit);
+            if(req.query.userId && !req.query.articleId) {
+                return res.status(204).json({status: 204, message: "No reservations found for the user provided."});
+            }
         }
         return res.status(200).json({status: 200, data: reservations, message: "Reservations received successfully."});
     } catch (ex) {

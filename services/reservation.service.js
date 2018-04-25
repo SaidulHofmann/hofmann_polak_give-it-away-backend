@@ -6,10 +6,19 @@ const Reservation = new require('../models/reservation.model');
 _this = this;
 
 
-exports.getReservations = async function (query, page, limit) {
+exports.getReservations = async function (jsonParams) {
     try {
-        // Options setup for the mongoose paginate.
-        let options = {page: page, limit: limit, populate: Reservation.populateAllOptions };
+        const unfiltered = new RegExp('.*');
+        let query = {
+            userId:     jsonParams.userId ? jsonParams.userId : unfiltered,
+            articleId:  jsonParams.articleId ? jsonParams.articleId : unfiltered,
+        };
+        let options = {
+            page:       jsonParams.page ? +jsonParams.page : 1,
+            limit:      jsonParams.limit ? +jsonParams.limit : 10,
+            sort:       jsonParams.sort ?    jsonParams.sort : {},
+            populate:   Reservation.populateAllOptions
+        };
         let reservations = await Reservation.paginate(query, options);
         return reservations;
     } catch (ex) {
@@ -20,16 +29,6 @@ exports.getReservations = async function (query, page, limit) {
 exports.getReservationById = async function (id) {
     try {
         let foundReservation = await Reservation.findById(id).populateAll();
-        if (!foundReservation) { return false; }
-        return foundReservation;
-    } catch (ex) {
-        throw Error("Error occured while retrieving the reservation. " + ex.message);
-    }
-};
-
-exports.getReservationByUserIdAndArticleId = async function (userId, articleId) {
-    try {
-        let foundReservation = await Reservation.findByUserIdAndArticleId(userId, articleId);
         if (!foundReservation) { return false; }
         return foundReservation;
     } catch (ex) {

@@ -2,14 +2,17 @@
 
 const mongoose = require('mongoose');
 const Article = new require('../models/article.model');
+const Reservation = new require('../models/reservation.model');
+const userInfo = require('../util/userInfo');
 
 // Save the context of this module.
 _this = this;
 
 
-exports.getArticles = async function (jsonParams) {
-    const unfiltered = new RegExp('.*');
+exports.getArticles = async function (userId, jsonParams) {
+    console.log('@articleService.getArticles()');
     try {
+        const unfiltered = new RegExp('.*');
         let query = {
             name:       jsonParams.name ? jsonParams.name : unfiltered,
             category:   jsonParams.category ?   jsonParams.category !== 'undefined' ? jsonParams.category : unfiltered    : unfiltered,
@@ -23,9 +26,32 @@ exports.getArticles = async function (jsonParams) {
             populate:   Article.populateAllOptions
         };
         let articles = await Article.paginate(query, options);
+        if(userId) {
+            await this.assignReservations(userId, articles);
+        }
         return articles;
     } catch (ex) {
         throw Error('Error while paginating articles. ' + ex.message);
+    }
+};
+
+/**
+ * Adds reservation to articles. Needed clientside when displaying articles.
+ */
+exports.assignReservations = async function (userId, articles) {
+    try{
+        for( let article of articles.docs) {
+            let reservation = await Reservation.findByUserIdAndArticleId(userId, article._id);
+            if(reservation) {
+                article.usersReservation = reservation;
+                article.userHasReservation = true;
+            } else {
+                article.usersReservation = { _id: '', article: '', user: '', commentPublisher: '', commentApplicant: ''};
+                article.userHasReservation = false;
+            }
+        };
+    } catch (ex) {
+        throw Error('Error while assigning reservation to articles. ' + ex.message);
     }
 };
 

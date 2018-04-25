@@ -20,7 +20,7 @@ const articleSchema = mongoose.Schema(
         category:               { type: String, ref: 'ArticleCategory', required: true },
         status:                 { type: String, ref: 'ArticleStatus', required: true }
     },
-    { collection: 'articles', timestamps: true }
+    { collection: 'articles', timestamps: true, toObject: { virtuals: true }, toJSON: { virtuals: true } }
 );
 
 articleSchema.statics.populateAllOptions = [
@@ -29,6 +29,16 @@ articleSchema.statics.populateAllOptions = [
     { path: 'category', select: 'name' },
     { path: 'status', select: 'name' },
 ];
+
+articleSchema.virtual('userHasReservation').
+    get(function() { return this._hasReservation; }).
+    set(function(hasReservation) { this._hasReservation = hasReservation;
+    });
+
+articleSchema.virtual('usersReservation').
+    get(function() { return this._reservation; }).
+    set(function(newReservation) { this._reservation = newReservation;
+    });
 
 articleSchema.query.populateAll = function() {
     return this.populate(this.model.populateAllOptions);

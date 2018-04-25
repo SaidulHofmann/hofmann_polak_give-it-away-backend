@@ -1,6 +1,7 @@
 // Article controller. Handles article api requests.
 
 const ArticleService = require('../services/article.service');
+const userInfo = require('../util/userInfo');
 
 // Save the context of this module.
 _this = this;
@@ -8,8 +9,8 @@ _this = this;
 
 exports.getArticles = async function (req, res) {
     try {
-         let articles = await ArticleService.getArticles(req.query);
-         return res.status(200).json({status: 200, data: articles, message: "Articles received successfully."});
+        let articles = await ArticleService.getArticles(userInfo.getUserId(req), req.query);
+        return res.status(200).json({status: 200, data: articles, message: "Articles received successfully."});
     } catch (ex) {
         return res.status(400).json({status: 400, message: ex.message});
     }
