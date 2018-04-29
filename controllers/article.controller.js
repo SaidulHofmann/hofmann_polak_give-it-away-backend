@@ -18,11 +18,14 @@ exports.getArticles = async function (req, res) {
 
 exports.getArticleById = async function (req, res) {
     try {
-        let id = req.params.id;
-        if (!id) {
-            return res.status(400).json({status: 400, message: "Id must be present."});
+        let userId = userInfo.getUserId(req);
+        let articleId = req.params.id;
+        let includeUsersReservation = JSON.parse(req.query.includeUsersReservation);
+
+        if (!articleId) {
+            return res.status(400).json({status: 400, message: "Article Id must be present."});
         }
-        let foundArticle = await ArticleService.getArticleById(id);
+        let foundArticle = await ArticleService.getArticleById(userId, articleId, includeUsersReservation);
         if (!foundArticle) {
             return res.status(404).json({status: 404, message: "Article could not be found."});
         }

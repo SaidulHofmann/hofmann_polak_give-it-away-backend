@@ -10,9 +10,10 @@ _this = this;
 
 
 exports.getArticles = async function (userId, jsonParams) {
-    console.log('@articleService.getArticles()');
     try {
         const unfiltered = new RegExp('.*');
+
+        let includeUsersReservation = JSON.parse(jsonParams.includeUsersReservation);
         let query = {
             name:       jsonParams.name ? jsonParams.name : unfiltered,
             category:   jsonParams.category ?   jsonParams.category !== 'undefined' ? jsonParams.category : unfiltered    : unfiltered,
@@ -25,43 +26,55 @@ exports.getArticles = async function (userId, jsonParams) {
             sort:       jsonParams.sort ?    jsonParams.sort !== 'undefined' ? jsonParams.sort : {}    : {},
             populate:   Article.populateAllOptions
         };
-        let articles = await Article.paginate(query, options);
-        if(userId) {
-            await this.assignReservations(userId, articles);
+
+        let articlesResponse = await Article.paginate(query, options);
+        if(includeUsersReservation) {
+            await this.includeReservationsToArray(userId, articlesResponse.docs);
         }
-        return articles;
+        return articlesResponse;
     } catch (ex) {
         throw Error('Error while paginating articles. ' + ex.message);
+    }
+};
+
+exports.getArticleById = async function (userId, articleId, includeUsersReservation) {
+    try {
+        let foundArticle = await Article.findById(articleId).populateAll();
+        if (!foundArticle) { return false; }
+        if(includeUsersReservation) {
+            await this.includeReservation(userId, foundArticle);
+        }
+        return foundArticle;
+    } catch (ex) {
+        throw Error("Error occured while retrieving the article. " + ex.message);
     }
 };
 
 /**
  * Adds reservation to articles. Needed clientside when displaying articles.
  */
-exports.assignReservations = async function (userId, articles) {
+exports.includeReservationsToArray = async function (userId, articleArray) {
     try{
-        for( let article of articles.docs) {
-            let reservation = await Reservation.findByUserIdAndArticleId(userId, article._id);
-            if(reservation) {
-                article.usersReservation = reservation;
-                article.userHasReservation = true;
-            } else {
-                article.usersReservation = { _id: '', article: '', user: '', commentPublisher: '', commentApplicant: ''};
-                article.userHasReservation = false;
-            }
+        for( let article of articleArray) {
+            await this.includeReservation(userId, article);
         };
     } catch (ex) {
         throw Error('Error while assigning reservation to articles. ' + ex.message);
     }
 };
 
-exports.getArticleById = async function (id) {
-    try {
-        let foundArticle = await Article.findById(id).populateAll();
-        if (!foundArticle) { return false; }
-        return foundArticle;
+exports.includeReservation = async function (userId, article) {
+    try{
+        let reservation = await Reservation.findByUserIdAndArticleId(userId, article._id);
+        if(reservation) {
+            article.usersReservation = reservation;
+            article.userHasReservation = true;
+        } else {
+            article.usersReservation = { _id: '', article: '', user: '', commentPublisher: '', commentApplicant: ''};
+            article.userHasReservation = false;
+        }
     } catch (ex) {
-        throw Error("Error occured while retrieving the article. " + ex.message);
+        throw Error('Error while assigning reservation to article. ' + ex.message);
     }
 };
 
