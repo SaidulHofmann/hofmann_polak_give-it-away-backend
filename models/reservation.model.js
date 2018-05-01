@@ -17,8 +17,8 @@ const reservationSchema = mongoose.Schema(
 reservationSchema.index({ article: 1, user: 1 }, { unique: true });
 
 reservationSchema.statics.populateAllOptions = [
-    { path: 'article' },
-    { path: 'user', select: 'firstname lastname' },
+    { path: 'article', select: 'name' },
+    { path: 'user', select: 'firstname lastname fullname' },
 ];
 
 reservationSchema.query.populateAll = function() {

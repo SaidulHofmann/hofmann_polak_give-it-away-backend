@@ -24,8 +24,8 @@ const articleSchema = mongoose.Schema(
 );
 
 articleSchema.statics.populateAllOptions = [
-    { path: 'publisher', select: 'firstname lastname' },
-    { path: 'donee', select: 'firstname lastname' },
+    { path: 'publisher', select: 'firstname lastname fullname' },
+    { path: 'donee', select: 'firstname lastname fullname' },
     { path: 'category', select: 'name' },
     { path: 'status', select: 'name' },
 ];

@@ -12,8 +12,13 @@ const userSchema = mongoose.Schema(
         authToken:  { type: String, default: '' }
 
     },
-    { collection: 'users', timestamps: true }
+    { collection: 'users', timestamps: true, toObject: { virtuals: true }, toJSON: { virtuals: true }  }
 );
+
+userSchema.virtual('fullname').
+   get(function() {
+       return this.firstname + ' ' + this.lastname;
+   });
 
 userSchema.plugin(mongoosePaginate);
 module.exports = mongoose.model('User', userSchema);

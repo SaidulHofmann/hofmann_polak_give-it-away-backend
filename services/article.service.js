@@ -70,7 +70,7 @@ exports.includeReservation = async function (userId, article) {
             article.usersReservation = reservation;
             article.userHasReservation = true;
         } else {
-            article.usersReservation = { _id: '', article: '', user: '', commentPublisher: '', commentApplicant: ''};
+            article.usersReservation = null;
             article.userHasReservation = false;
         }
     } catch (ex) {
