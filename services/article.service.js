@@ -11,24 +11,29 @@ _this = this;
 
 exports.getArticles = async function (userId, jsonParams) {
     try {
-        const unfiltered = new RegExp('.*');
+        let includeUsersReservation = jsonParams.includeUsersReservation ? JSON.parse(jsonParams.includeUsersReservation): false;
+        let selectReservedArticles = jsonParams.selectReservedArticles ? JSON.parse(jsonParams.selectReservedArticles): false;
+        let selectPublishedArticles = jsonParams.selectPublishedArticles ? JSON.parse(jsonParams.selectPublishedArticles): false;
 
-        let includeUsersReservation = JSON.parse(jsonParams.includeUsersReservation);
-        let query = {
-            name:       jsonParams.name ? jsonParams.name : unfiltered,
-            category:   jsonParams.category ?   jsonParams.category !== 'undefined' ? jsonParams.category : unfiltered    : unfiltered,
-            status:     jsonParams.status ?   jsonParams.status !== 'undefined' ? jsonParams.status : unfiltered    : unfiltered,
-            tags:       jsonParams.tags ? new RegExp(jsonParams.tags, 'i') : unfiltered
-        };
-        let options = {
-            page:       jsonParams.page ? +jsonParams.page : 1,
-            limit:      jsonParams.limit ? +jsonParams.limit : 10,
-            sort:       jsonParams.sort ?    jsonParams.sort !== 'undefined' ? jsonParams.sort : {}    : {},
-            populate:   Article.populateAllOptions
-        };
+        let query = {};
+        if (jsonParams.name) { query.name = jsonParams.name };
+        if (jsonParams.category && jsonParams.category !== 'undefined') { query.category = jsonParams.category };
+        if (jsonParams.status && jsonParams.status !== 'undefined') { query.status = jsonParams.status };
+        if (jsonParams.tags) { query.tags = jsonParams.tags };
+        if (selectPublishedArticles) { query.publisher = userId };
 
+        let options = {};
+        options.page = jsonParams.page ? +jsonParams.page: 1;
+        options.limit = jsonParams.limit ? +jsonParams.limit: 10;
+        if (jsonParams.sort && jsonParams.sort !== 'undefined') { options.sort = jsonParams.sort };
+        options.populate = Article.populateAllOptions;
+
+        if (selectReservedArticles) {
+            let reservedArticlesIds = await Reservation.find({user: userId}).distinct('article');
+            query._id = { $in: reservedArticlesIds };
+        }
         let articlesResponse = await Article.paginate(query, options);
-        if(includeUsersReservation) {
+        if (includeUsersReservation) {
             await this.includeReservationsToArray(userId, articlesResponse.docs);
         }
         return articlesResponse;
