@@ -8,11 +8,10 @@ _this = this;
 
 exports.getReservations = async function (jsonParams) {
     try {
-        const unfiltered = new RegExp('.*');
-        let query = {
-            userId:     jsonParams.userId ? jsonParams.userId : unfiltered,
-            articleId:  jsonParams.articleId ? jsonParams.articleId : unfiltered,
-        };
+        let query = {};
+        if(jsonParams.userId) { query.user = jsonParams.userId };
+        if(jsonParams.articleId) { query.article = jsonParams.articleId };
+
         let options = {
             page:       jsonParams.page ? +jsonParams.page : 1,
             limit:      jsonParams.limit ? +jsonParams.limit : 10,

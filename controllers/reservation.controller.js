@@ -17,6 +17,9 @@ exports.getReservations = async function (req, res, next) {
             if(req.query.userId && !req.query.articleId) {
                 return res.status(204).json({status: 204, message: "No reservations found for the user provided."});
             }
+            if(!req.query.userId && req.query.articleId) {
+                return res.status(204).json({status: 204, message: "No reservations found for the article id provided."});
+            }
         }
         return res.status(200).json({status: 200, data: reservations, message: "Reservations received successfully."});
     } catch (ex) {
