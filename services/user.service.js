@@ -26,10 +26,10 @@ function publicAuthentication(email, passwort, callback) {
     });
 }
 
-async function getUsers (query, page, limit) {
+async function getUsers (query, page, limit, sort) {
     try {
         // Options setup for the mongoose paginate.
-        let options = {page: page, limit: limit };
+        let options = {page: page, limit: limit, sort: sort };
         let users = await User.paginate(query, options);
         return users;
     } catch (ex) {

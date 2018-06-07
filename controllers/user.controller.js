@@ -6,11 +6,22 @@ const util = require("../util/security");
 
 
 exports.getUsers = async function (req, res) {
+    console.log('@user.controller.getUsers()');
     try {
-        let page = req.query.page ? req.query.page : 1;
-        let limit = req.query.limit ? req.query.limit : 10;
+        let page = req.query.page ? +req.query.page : 1;
+        let limit = req.query.limit ? +req.query.limit : 10;
+        let sort = req.query.sort ? req.query.sort : {};
+        let filter = req.query.filter ? req.query.filter : '';
 
-        let users = await UserService.getUsers({}, page, limit);
+        let query = {};
+        if(filter) {
+            let filterExp = new RegExp(filter, "i");
+            let ObjectId = require('mongoose').Types.ObjectId;
+            query = { $or:
+                        [ { firstname: filterExp }, { lastname: filterExp }, { email: filterExp }, { _id: new ObjectId(filter) } ]
+                    }
+        }
+        let users = await UserService.getUsers(query, page, limit, sort);
         return res.status(200).json({status: 200, data: users, message: "Users received successfully."});
     } catch (ex) {
         return res.status(400).json({status: 400, message: ex.message});
