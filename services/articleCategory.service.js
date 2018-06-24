@@ -1,83 +1,41 @@
-/* Article category service. Contains CRUD operations and business logic functions. */
+// Article category service. Contains CRUD operations and business logic functions.
 
 const ArticleCategory = new require('../models/articleCategory.model');
+const customErrors = require('../core/errors.core.js');
+const ArgumentError = customErrors.ArgumentError;
 
 // Save the context of this module.
 _this = this;
 
 
 exports.getArticleCategories = async function (query, page, limit) {
-    try {
-        // Options setup for the mongoose paginate.
-        let options = {page, limit};
-        let articlesCategories = await ArticleCategory.paginate(query, options);
-        return articlesCategories;
-    } catch (ex) {
-        throw Error('Error while paginating article categories. ' + ex.message);
-    }
+    let options = {page, limit};
+    return ArticleCategory.paginate(query, options);
 };
 
 exports.getArticleCategoryById = async function (id) {
-    try {
-        let foundArticleCategory = await ArticleCategory.findById(id);
-        if (!foundArticleCategory) { return false; }
-        return foundArticleCategory;
-    } catch (ex) {
-        throw Error("Error occured while retrieving the article category entry. " + ex.message);
-    }
+    let foundArticleCategory = await ArticleCategory.findById(id);
+    if (!foundArticleCategory) { return false; }
+    return foundArticleCategory;
 };
 
-/**
- * Creates an articleCategory entry in the database.
- * @param jsonArticleCategory: ArticleCategory object, partial or complete, in json format.
- * @returns {Promise<*>}
- */
 exports.createArticleCategory = async function (jsonArticleCategory) {
-    try {
-        let newArticleCategory = new ArticleCategory(jsonArticleCategory);
-        let savedArticleCategory= await newArticleCategory.save();
-        return savedArticleCategory;
-    } catch (ex) {
-        throw Error("Error while creating article category entry. " + ex.message);
-    }
+    let newArticleCategory = new ArticleCategory(jsonArticleCategory);
+    return newArticleCategory.save();
 };
 
-/**
- * Uodates an existing article category.
- * @param jsonArticleCategory : ArticleCategory object, partial or complete, in json format.
- * @returns {Promise<*>}
- */
 exports.updateArticleCategory = async function (jsonArticleCategory) {
-    let oldArticleCategory = null;
-    try {
-        oldArticleCategory = await ArticleCategory.findById(jsonArticleCategory._id);
-        if (!oldArticleCategory) { throw Error("Article category entry could not be found."); }
-    } catch (ex) {
-        throw Error("Error occured while retrieving the article category entry. " + ex.message);
-    }
-    try {
-        Object.assign(oldArticleCategory, jsonArticleCategory);
-        let savedArticleCategory = await oldArticleCategory.save();
-        return savedArticleCategory;
-    } catch (ex) {
-        throw Error("An error occured while updating the article category entry. " + ex.message);
-    }
+    let oldArticleCategory = await ArticleCategory.findById(jsonArticleCategory._id);
+    if (!oldArticleCategory) { throw ArgumentError(`Die Artikel Kategorie mit der Id '${jsonArticleCategory._id}' wurde nicht gefunden.`); }
+
+    Object.assign(oldArticleCategory, jsonArticleCategory);
+    return oldArticleCategory.save();
 };
 
 exports.deleteArticleCategory = async function (id) {
-    let articleCategory = null;
-    try {
-        articleCategory = await ArticleCategory.findById(id);
-        if (!articleCategory) { throw Error("Article category entry could not be found."); }
-    } catch (ex) {
-        throw Error("Error occured while retrieving the article category entry. " + ex.message);
-    }
-    try {
-        let deletedArticleCategory = await articleCategory.remove();
-        return deletedArticleCategory;
-    } catch (ex) {
-        throw Error("Error occured while deleting the article category entry. " + ex.message);
-    }
+    let articleCategory = await ArticleCategory.findById(id);
+    if (!articleCategory) { throw ArgumentError(`Die Artikel Kategorie mit der Id '${id}' wurde nicht gefunden.`); }
+    return articleCategory.remove();
 };
 
 exports.createInitialDbEntries = async function () {
@@ -93,8 +51,8 @@ exports.createInitialDbEntries = async function () {
         await this.createArticleCategory({_id: 'leisure', name: 'Freizeit'});
         await this.createArticleCategory({_id: 'electronics', name: 'Elektronik'});
 
-        console.log("ArticleCategory entries created successfully.");
+        console.log('Die initialen Datenbank-Einträge für die Collection ArticleCategory wurden erfolgreich erstellt.');
     } catch(ex) {
-        throw Error("Error while creating initial entries for article category. " + ex.message);
+        throw Error('Fehler bei der Erstellung der initialen Datenbank-Einträge für die Collection ArticleCategory: ' + ex.message);
     }
 };

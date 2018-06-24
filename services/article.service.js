@@ -3,138 +3,95 @@
 const mongoose = require('mongoose');
 const Article = new require('../models/article.model');
 const Reservation = new require('../models/reservation.model');
-const userInfo = require('../util/userInfo');
+const userInfo = require('../util/helper');
+const customErrors = require('../core/errors.core.js');
+const ArgumentError = customErrors.ArgumentError;
 
 // Save the context of this module.
 _this = this;
 
 
 exports.getArticles = async function (userId, jsonParams) {
-    try {
-        let includeUsersReservation = jsonParams.includeUsersReservation ? JSON.parse(jsonParams.includeUsersReservation): false;
-        let selectReservedArticles = jsonParams.selectReservedArticles ? JSON.parse(jsonParams.selectReservedArticles): false;
-        let selectPublishedArticles = jsonParams.selectPublishedArticles ? JSON.parse(jsonParams.selectPublishedArticles): false;
+    let includeUsersReservation = jsonParams.includeUsersReservation ? JSON.parse(jsonParams.includeUsersReservation): false;
+    let selectReservedArticles = jsonParams.selectReservedArticles ? JSON.parse(jsonParams.selectReservedArticles): false;
+    let selectPublishedArticles = jsonParams.selectPublishedArticles ? JSON.parse(jsonParams.selectPublishedArticles): false;
 
-        let query = {};
-        if (jsonParams.name) { query.name = jsonParams.name };
-        if (jsonParams.category && jsonParams.category !== 'undefined') { query.category = jsonParams.category };
-        if (jsonParams.status && jsonParams.status !== 'undefined') { query.status = jsonParams.status };
-        if (jsonParams.tags) { query.tags = jsonParams.tags };
-        if (selectPublishedArticles) { query.publisher = userId };
+    let query = {};
+    if (jsonParams.name) { query.name = jsonParams.name };
+    if (jsonParams.category && jsonParams.category !== 'undefined') { query.category = jsonParams.category };
+    if (jsonParams.status && jsonParams.status !== 'undefined') { query.status = jsonParams.status };
+    if (jsonParams.tags) { query.tags = jsonParams.tags };
+    if (selectPublishedArticles) { query.publisher = userId };
 
-        let options = {};
-        options.page = jsonParams.page ? +jsonParams.page: 1;
-        options.limit = jsonParams.limit ? +jsonParams.limit: 10;
-        if (jsonParams.sort && jsonParams.sort !== 'undefined') { options.sort = jsonParams.sort };
-        options.populate = Article.populateAllOptions;
+    let options = {};
+    options.page = jsonParams.page ? +jsonParams.page: 1;
+    options.limit = jsonParams.limit ? +jsonParams.limit: 10;
+    if (jsonParams.sort && jsonParams.sort !== 'undefined') { options.sort = jsonParams.sort };
+    options.populate = Article.populateAllOptions;
 
-        if (selectReservedArticles) {
-            let reservedArticlesIds = await Reservation.find({user: userId}).distinct('article');
-            query._id = { $in: reservedArticlesIds };
-        }
-        let articlesResponse = await Article.paginate(query, options);
-        if (includeUsersReservation) {
-            await this.includeReservationsToArray(userId, articlesResponse.docs);
-        }
-        return articlesResponse;
-    } catch (ex) {
-        throw Error('Error while paginating articles. ' + ex.message);
+    if (selectReservedArticles) {
+        let reservedArticlesIds = await Reservation.find({user: userId}).distinct('article');
+        query._id = { $in: reservedArticlesIds };
     }
+    let articlesResponse = await Article.paginate(query, options);
+    if (includeUsersReservation) {
+        await this.includeReservationsToArray(userId, articlesResponse.docs);
+    }
+    return articlesResponse;
 };
 
 exports.getArticleById = async function (userId, articleId, includeUsersReservation) {
-    try {
-        let foundArticle = await Article.findById(articleId).populateAll();
-        if (!foundArticle) { return false; }
-        if(includeUsersReservation) {
-            await this.includeReservation(userId, foundArticle);
-        }
-        return foundArticle;
-    } catch (ex) {
-        throw Error("Error occured while retrieving the article. " + ex.message);
+    let foundArticle = await Article.findById(articleId).populateAll();
+    if (!foundArticle) { return false; }
+    if(includeUsersReservation) {
+        await this.includeReservation(userId, foundArticle);
     }
+    return foundArticle;
 };
 
 /**
- * Adds reservation to articles. Needed clientside when displaying articles.
+ * Adds reservation to articles. Needed client side when displaying articles.
  */
 exports.includeReservationsToArray = async function (userId, articleArray) {
     try{
         for( let article of articleArray) {
             await this.includeReservation(userId, article);
-        };
+        }
     } catch (ex) {
-        throw Error('Error while assigning reservation to articles. ' + ex.message);
+        throw Error('Fehler bei der Zuweisung von Reservationen zu Artikeln. ' + ex.message);
     }
 };
 
 exports.includeReservation = async function (userId, article) {
-    try{
-        let reservation = await Reservation.findByUserIdAndArticleId(userId, article._id);
-        if(reservation) {
-            article.usersReservation = reservation;
-            article.userHasReservation = true;
-        } else {
-            article.usersReservation = null;
-            article.userHasReservation = false;
-        }
-    } catch (ex) {
-        throw Error('Error while assigning reservation to article. ' + ex.message);
+    let reservation = await Reservation.findByUserIdAndArticleId(userId, article._id);
+    if(reservation) {
+        article.usersReservation = reservation;
+        article.userHasReservation = true;
+    } else {
+        article.usersReservation = null;
+        article.userHasReservation = false;
     }
 };
 
-/**
- * Creates an article entry in the database.
- * @param jsonArticle: Article object, partial or complete, in json format.
- * @returns {Promise<*>}
- */
 exports.createArticle = async function (jsonArticle) {
-    try {
-        let newArticle = new Article(jsonArticle);
-        if(!newArticle._id) { newArticle._id = mongoose.Types.ObjectId(); }
-        let savedArticle = await newArticle.save();
-        return Article.findById(savedArticle._id).populateAll();
-    } catch (ex) {
-        throw Error("Error while creating article. " + ex.message);
-    }
+    let newArticle = new Article(jsonArticle);
+    if(!newArticle._id) { newArticle._id = mongoose.Types.ObjectId(); }
+    let savedArticle = await newArticle.save();
+    return Article.findById(savedArticle._id).populateAll();
 };
 
-/**
- * Uodates an existing article.
- * @param jsonArticle : Article object, partial or complete, in json format.
- * @returns {Promise<*>}
- */
 exports.updateArticle = async function (jsonArticle) {
-    let oldArticle = null;
-    try {
-        oldArticle = await Article.findById(jsonArticle._id).populateAll();
-        if (!oldArticle) { throw Error("Article could not be found."); }
-    } catch (ex) {
-        throw Error("Error occured while retrieving the article. " + ex.message);
-    }
-    try {
-        Object.assign(oldArticle, jsonArticle);
-        let savedArticle = await oldArticle.save();
-        return savedArticle;
-    } catch (ex) {
-        throw Error("An error occured while updating the article. " + ex.message);
-    }
+    let oldArticle = await Article.findById(jsonArticle._id).populateAll();
+    if (!oldArticle) { throw ArgumentError(`Der Artikel mit der Id '${jsonArticle._id}' wurde nicht gefunden.`); }
+
+    Object.assign(oldArticle, jsonArticle);
+    return oldArticle.save();
 };
 
 exports.deleteArticle = async function (id) {
-    let article = null;
-    try {
-        article = await Article.findById(id).populateAll();
-        if (!article) { throw Error("Article could not be found."); }
-    } catch (ex) {
-        throw Error("Error occured while retrieving the article. " + ex.message);
-    }
-    try {
-        let deletedArticle = await article.remove();
-        return deletedArticle;
-    } catch (ex) {
-        throw Error("Error occured while deleting the article. " + ex.message);
-    }
+    let article = await Article.findById(id).populateAll();
+    if (!article) { throw ArgumentError(`Der Artikel mit der Id '${id}' wurde nicht gefunden.`); }
+    return article.remove();
 };
 
 exports.createInitialDbEntries = async function () {
@@ -259,8 +216,8 @@ exports.createInitialDbEntries = async function () {
             status:             "available"
         }));
 
-        console.log("Article entries created successfully.");
+        console.log('Die initialen Datenbank-Einträge für die Collection Article wurden erfolgreich erstellt.');
     } catch(ex) {
-        throw Error("Error while creating initial entries for article collection. " + ex.message);
+        throw Error('Fehler bei der Erstellung der initialen Datenbank-Einträge für die Collection Article: ' + ex.message);
     }
 };

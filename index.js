@@ -18,7 +18,7 @@ const jwt = require('express-jwt');
 const jwtSecret = 'aklsdjfklöasjdcma8sd90mcklasdföasdf$ädasöfü pi340qkrlöam,dflöäasf';
 
 
-// Aplication settings
+// Application settings
 //-----------------------------------------------------------------------------
 app.set("jwt-secret", jwtSecret); //secret should be in a config file - or better be a private key!
 app.set("jwt-sign", {expiresIn: "1d", audience: "self", issuer: "myself"});
@@ -47,7 +47,7 @@ db.once('open', function() {
     // }
 });
 
-// Middleware configuartion
+// Middleware configuration
 //-----------------------------------------------------------------------------
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
@@ -64,9 +64,6 @@ app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'authorization, Content-Type, Accept, Origin, X-Requested-With');
-
-    // Set to true if you need the website to include cookies in the requests sent
-    // to the API (e.g. in case you use sessions)
     res.setHeader('Access-Control-Allow-Credentials', true);
     next();
 });
@@ -87,7 +84,8 @@ app.use('/api', require('./routes/api.route'));
 
 app.use(function (err, req, res, next) {
     if (err.name === 'UnauthorizedError') {
-        res.status(401).send('No token / Invalid token provided');
+        res.status(401).json({status: 401, name: err.name,
+            message: 'Zugriff verweigert weil nicht angemeldet oder Anmeldung abgelaufen.'});
     }
     else {
         next(err);

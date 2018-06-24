@@ -4,50 +4,60 @@ const crypto = require('crypto');
 const cryptoUtil = require('../util/cryptoUtil');
 const mongoose = require('mongoose');
 const User = new require('../models/user.model');
+const customErrors = require('../core/errors.core.js');
 
 
-async function publicRegisterUser(jsonUser) {
-    try {
-        let newUser = new User(jsonUser);
-        newUser.password = cryptoUtil.hashPwd(jsonUser.password);
-        let savedUser = await newUser.save();
-        return savedUser;
-    } catch (ex) {
-        throw Error("Error occured while creating the user. " + ex.message);
-    }
-}
-
-function publicAuthentication(email, passwort, callback) {
+function publicAuthenticate(email, passwort, callback) {
     if (!(email && passwort)) {
         callback(false);
     }
     User.findOne({email: email}, function (err, user) {
-        callback(err, user, user && user.password == cryptoUtil.hashPwd(passwort));
+        callback(err, user, user && user.password === cryptoUtil.hashPwd(passwort));
     });
 }
 
-async function getUsers (query, page, limit, sort) {
-    try {
-        // Options setup for the mongoose paginate.
-        let options = {page: page, limit: limit, sort: sort };
-        let users = await User.paginate(query, options);
-        return users;
-    } catch (ex) {
-        throw Error('Error while paginating users. ' + ex.message);
-    }
-};
+async function publicGetUsers (query, page, limit, sort) {
+    let options = {page: page, limit: limit, sort: sort };
+    return User.paginate(query, options);
+}
 
-async function getUserById (id) {
-    try {
-        let foundUser = await User.findById(id);
-        if (!foundUser) { return false; }
-        return foundUser;
-    } catch (ex) {
-        throw Error("Error occured while retrieving the user. " + ex.message);
-    }
-};
+async function publicGetUserById (id) {
+    let foundUser = await User.findById(id);
+    if (!foundUser) { return false; }
+    return foundUser;
+}
 
-function createInitialDbEntries() {
+async function publicRegisterUser(jsonUser) {
+    let newUser = new User(jsonUser);
+    newUser.password = cryptoUtil.hashPwd(jsonUser.password);
+    return newUser.save();
+}
+
+async function publicUpdateUser(jsonUser) {
+    let oldUser = await User.findById(jsonUser._id);
+    if (!oldUser) { throw customErrors.ArgumentError(`Der Benutzer mit der Id '${jsonUser._id}' wurde nicht gefunden.`); }
+
+    // Check if email changed and duplicate exists.
+    let userWithSameEmail = await User.findOne({email: jsonUser.email});
+    if(userWithSameEmail && ! userWithSameEmail._id.equals(jsonUser._id)) {
+        throw new customErrors.DuplicateKeyError(`Die E-Mail Adresse '${jsonUser.email}' wird bereits verwendet. Wählen Sie bitte eine andere E-Mail Adresse.`);
+    }
+
+    let oldPasswordHash = oldUser.password;
+    Object.assign(oldUser, jsonUser);
+    if(oldPasswordHash !== jsonUser.password) {
+        oldUser.password = cryptoUtil.hashPwd(jsonUser.password);
+    }
+    return oldUser.save();
+}
+
+async function publicDeleteUser(id) {
+    let user = await User.findById(id);
+    if (!user) { throw ArgumentError(`Der Benutzer mit der Id '${id}' wurde nicht gefunden.`); }
+    return user.remove();
+}
+
+function publicCreateInitialDbEntries() {
     try {
         this.createUser({
             _id: '5abc0267d608821850991037',
@@ -64,16 +74,18 @@ function createInitialDbEntries() {
             lastname: 'Meier'
         });
 
-        console.log("User entries created successfully.");
+        console.log('Die initialen Datenbank-Einträge für die Collection User wurden erfolgreich erstellt.');
     } catch(ex) {
-        throw Error("Error while creating initial entries for user. " + ex.message);
+        throw Error('Fehler bei der Erstellung der initialen Datenbank-Einträge für die Collection User: ' + ex.message);
     }
-};
+}
 
 module.exports = {
+    authenticate: publicAuthenticate,
+    getUsers: publicGetUsers,
+    getUserById: publicGetUserById,
     createUser: publicRegisterUser,
-    authenticate: publicAuthentication,
-    getUsers: getUsers,
-    getUserById: getUserById,
-    createInitialDbEntries: createInitialDbEntries
+    updateUser: publicUpdateUser,
+    deleteUser : publicDeleteUser,
+    createInitialDbEntries: publicCreateInitialDbEntries
 };

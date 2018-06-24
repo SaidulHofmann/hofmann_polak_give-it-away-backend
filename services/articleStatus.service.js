@@ -1,83 +1,41 @@
 /* Article status service. Contains CRUD operations and business logic functions. */
 
 const ArticleStatus = new require('../models/articleStatus.model');
+const customErrors = require('../core/errors.core.js');
+const ArgumentError = customErrors.ArgumentError;
 
 // Save the context of this module.
 _this = this;
 
 
 exports.getArticleStatus = async function (query, page, limit) {
-    try {
-        // Options setup for the mongoose paginate.
-        let options = {page, limit};
-        let articlesStatus = await ArticleStatus.paginate(query, options);
-        return articlesStatus;
-    } catch (ex) {
-        throw Error('Error while paginating article status. ' + ex.message);
-    }
+    let options = {page, limit};
+    return ArticleStatus.paginate(query, options);
 };
 
 exports.getArticleStatusById = async function (id) {
-    try {
-        let foundArticleStatus = await ArticleStatus.findById(id);
-        if (!foundArticleStatus) { return false; }
-        return foundArticleStatus;
-    } catch (ex) {
-        throw Error("Error occured while retrieving the article status entry. " + ex.message);
-    }
+    let foundArticleStatus = await ArticleStatus.findById(id);
+    if (!foundArticleStatus) { return false; }
+    return foundArticleStatus;
 };
 
-/**
- * Creates an articleStatus entry in the database.
- * @param jsonArticleStatus: ArticleStatus object, partial or complete, in json format.
- * @returns {Promise<*>}
- */
 exports.createArticleStatus = async function (jsonArticleStatus) {
-    try {
-        let newArticleStatus = new ArticleStatus(jsonArticleStatus);
-        let savedArticleStatus = await newArticleStatus.save();
-        return savedArticleStatus;
-    } catch (ex) {
-        throw Error("Error while creating article status entry. " + ex.message);
-    }
+    let newArticleStatus = new ArticleStatus(jsonArticleStatus);
+    return newArticleStatus.save();
 };
 
-/**
- * Uodates an existing article status.
- * @param params : ArticleStatus object, partial or complete, in json format.
- * @returns {Promise<*>}
- */
 exports.updateArticleStatus = async function (jsonArticleStatus) {
-    let oldArticleStatus = null;
-    try {
-        oldArticleStatus = await ArticleStatus.findById(jsonArticleStatus._id);
-        if (!oldArticleStatus) { throw Error("ArticleStatus entry could not be found."); }
-    } catch (ex) {
-        throw Error("Error occured while retrieving the article status entry. " + ex.message);
-    }
-    try {
-        Object.assign(oldArticleStatus, jsonArticleStatus);
-        let savedArticleStatus = await oldArticleStatus.save();
-        return savedArticleStatus;
-    } catch (ex) {
-        throw Error("An error occured while updating the article status entry. " + ex.message);
-    }
+    let oldArticleStatus = await ArticleStatus.findById(jsonArticleStatus._id);
+    if (!oldArticleStatus) { throw ArgumentError(`Der Artikel Status mit der Id '${jsonArticleStatus._id}' wurde nicht gefunden.`); }
+
+    Object.assign(oldArticleStatus, jsonArticleStatus);
+    return oldArticleStatus.save();
 };
 
 exports.deleteArticleStatus = async function (id) {
-    let articleStatus = null;
-    try {
-        articleStatus = await ArticleStatus.findById(id);
-        if (!articleStatus) { throw Error("Article status entry could not be found."); }
-    } catch (ex) {
-        throw Error("Error occured while retrieving the article status entry. " + ex.message);
-    }
-    try {
-        let deletedArticleStatus = await articleStatus.remove();
-        return deletedArticleStatus;
-    } catch (ex) {
-        throw Error("Error occured while deleting the article status entry. " + ex.message);
-    }
+    let articleStatus = await ArticleStatus.findById(id);
+    if (!articleStatus) { throw ArgumentError(`Der Artikel Status mit der Id '${id}' wurde nicht gefunden.`); }
+    return articleStatus.remove();
 };
 
 exports.createInitialDbEntries = async function () {
@@ -86,8 +44,8 @@ exports.createInitialDbEntries = async function () {
         await this.createArticleStatus({_id: 'handoverPending', name: 'Übergabe pendent'});
         await this.createArticleStatus({_id: 'donated', name: 'Artikel verschenkt'});
 
-        console.log("ArticleStatus entries created successfully.");
+        console.log('Die initialen Datenbank-Einträge für die Collection ArticleStatus wurden erfolgreich erstellt.');
     } catch(ex) {
-        throw Error("Error while creating initial entries for article status. " + ex.message);
+        throw Error('Fehler bei der Erstellung der initialen Datenbank-Einträge für die Collection ArticleStatus: ' + ex.message);
     }
 };

@@ -1,91 +1,51 @@
 /* Reservation service. Contains CRUD operations and business logic functions. */
 
 const Reservation = new require('../models/reservation.model');
+const customErrors = require('../core/errors.core.js');
+const ArgumentError = customErrors.ArgumentError;
 
 // Save the context of this module.
 _this = this;
 
 
 exports.getReservations = async function (jsonParams) {
-    try {
-        let query = {};
-        if(jsonParams.userId) { query.user = jsonParams.userId };
-        if(jsonParams.articleId) { query.article = jsonParams.articleId };
+    let query = {};
+    if(jsonParams.userId) { query.user = jsonParams.userId }
+    if(jsonParams.articleId) { query.article = jsonParams.articleId }
 
-        let options = {
-            page:       jsonParams.page ? +jsonParams.page : 1,
-            limit:      jsonParams.limit ? +jsonParams.limit : 10,
-            sort:       jsonParams.sort ?    jsonParams.sort : {},
-            populate:   Reservation.populateAllOptions
-        };
-        let reservations = await Reservation.paginate(query, options);
-        return reservations;
-    } catch (ex) {
-        throw Error('Error while paginating reservations. ' + ex.message);
-    }
+    let options = {
+        page:       jsonParams.page ? +jsonParams.page : 1,
+        limit:      jsonParams.limit ? +jsonParams.limit : 10,
+        sort:       jsonParams.sort ?    jsonParams.sort : {},
+        populate:   Reservation.populateAllOptions
+    };
+    return Reservation.paginate(query, options);
 };
 
 exports.getReservationById = async function (id) {
-    try {
-        let foundReservation = await Reservation.findById(id).populateAll();
-        if (!foundReservation) { return false; }
-        return foundReservation;
-    } catch (ex) {
-        throw Error("Error occured while retrieving the reservation. " + ex.message);
-    }
+    let foundReservation = await Reservation.findById(id).populateAll();
+    if (!foundReservation) { return false; }
+    return foundReservation;
 };
 
-/**
- * Creates a reservation entry in the database.
- * @param jsonReservation: Reservation object, partial or complete, in json format.
- * @returns {Promise<*>}
- */
 exports.createReservation = async function (jsonReservation) {
-    try {
-        let newReservation = new Reservation(jsonReservation);
-        let savedReservation = await newReservation.save();
-        return Reservation.findById(savedReservation._id).populateAll();
-    } catch (ex) {
-        throw Error("Error while creating reservation. " + ex.message);
-    }
+    let newReservation = new Reservation(jsonReservation);
+    let savedReservation = await newReservation.save();
+    return Reservation.findById(savedReservation._id).populateAll();
 };
 
-/**
- * Uodates an existing reservation.
- * @param jsonReservation : Reservation object, partial or complete, in json format.
- * @returns {Promise<*>}
- */
 exports.updateReservation = async function (jsonReservation) {
-    let oldReservation = null;
-    try {
-        oldReservation = await Reservation.findById(jsonReservation._id).populateAll();
-        if (!oldReservation) { throw Error("Reservation could not be found."); }
-    } catch (ex) {
-        throw Error("Error occured while retrieving the reservation. " + ex.message);
-    }
-    try {
-        Object.assign(oldReservation, jsonReservation);
-        let savedReservation = await oldReservation.save();
-        return savedReservation;
-    } catch (ex) {
-        throw Error("An error occured while updating the reservation. " + ex.message);
-    }
+    let oldReservation = await Reservation.findById(jsonReservation._id).populateAll();
+    if (!oldReservation) { throw ArgumentError(`Die Reservation mit der Id '${jsonReservation._id}' wurde nicht gefunden.`); }
+
+    Object.assign(oldReservation, jsonReservation);
+    return oldReservation.save();
 };
 
 exports.deleteReservation = async function (id) {
-    let reservation = null;
-    try {
-        reservation = await Reservation.findById(id).populateAll();
-        if (!reservation) { throw Error("Reservation could not be found."); }
-    } catch (ex) {
-        throw Error("Error occured while retrieving the reservation. " + ex.message);
-    }
-    try {
-        let deletedReservation = await reservation.remove();
-        return deletedReservation;
-    } catch (ex) {
-        throw Error("Error occured while deleting the reservation. " + ex.message);
-    }
+    let reservation = await Reservation.findById(id).populateAll();
+    if (!reservation) { throw ArgumentError(`Die Reservation mit der Id '${id}' wurde nicht gefunden.`); }
+    return reservation.remove();
 };
 
 exports.createInitialDbEntries = async function () {
@@ -114,9 +74,9 @@ exports.createInitialDbEntries = async function () {
             commentApplicant: 'Ich brauche Ausgleich zu meinem Büro Job.'
         });
 
-        console.log("Reservation entries created successfully.");
+        console.log('Die initialen Datenbank-Einträge für die Collection Reservation wurden erfolgreich erstellt.');
     } catch(ex) {
-        throw Error("Error while creating initial entries for reservations. " + ex.message);
+        throw Error('Fehler bei der Erstellung der initialen Datenbank-Einträge für die Collection Reservation: ' + ex.message);
     }
 };
 

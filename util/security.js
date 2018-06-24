@@ -38,14 +38,14 @@ function handleLogin(req, res) {
                     req.app.get("jwt-sign"),
                     (token) => {
                     user.authToken = token;
-                    res.status(201).json({status: 201, data: user, message: "User authenticated successfully."});
+                    res.status(201).json({status: 201, data: user, message: "Der Anmeldevorgang wurde erfolgreich abgeschlossen."});
                 });
             }
             else if (err) {
-                res.status("401").json({status: 401, message: "An error occurred while authenticating. " +err.message});
+                res.status(401).json({status: 401, name: err.name,  message: 'Bei der Anmeldung ist ein Fehler aufgetreten. ' +err.message});
             }
             else {
-                res.status("401").json({status: 401, message: "Authentication failed."});
+                res.status(401).json({status: 401, name: 'Error', message: 'Der Anmeldevorgang war nicht erfolgreich.'});
             }
         });
     }
