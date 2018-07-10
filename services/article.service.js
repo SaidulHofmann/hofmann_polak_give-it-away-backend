@@ -3,7 +3,7 @@
 const mongoose = require('mongoose');
 const Article = new require('../models/article.model');
 const Reservation = new require('../models/reservation.model');
-const userInfo = require('../util/helper');
+const userInfo = require('../utils/helper');
 const customErrors = require('../core/errors.core.js');
 const ArgumentError = customErrors.ArgumentError;
 
@@ -218,6 +218,6 @@ exports.createInitialDbEntries = async function () {
 
         console.log('Die initialen Datenbank-Einträge für die Collection Article wurden erfolgreich erstellt.');
     } catch(ex) {
-        throw Error('Fehler bei der Erstellung der initialen Datenbank-Einträge für die Collection Article: ' + ex.message);
+        throw Error('Fehler bei der Erstellung der initialen Datenbank-Einträge für die Collection Article:\n' + ex.stack);
     }
 };

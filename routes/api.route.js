@@ -8,6 +8,7 @@ router.use('/articles', require('./api/article.route'));
 router.use('/articleCategories', require('./api/articleCategory.route'));
 router.use('/articleStatus', require('./api/articleStatus.route'));
 router.use('/reservations', require('./api/reservation.route'));
+router.use('/permissions', require('./api/permission.route'));
 
 
 

@@ -1,8 +1,8 @@
 // User controller. Handles user api requests.
 
 const UserService = require('../services/user.service');
-const util = require("../util/security");
-const helper = require('../util/helper');
+const util = require("../utils/security");
+const helper = require('../utils/helper');
 const customErrors = require('../core/errors.core.js');
 const ArgumentError = customErrors.ArgumentError;
 const ObjectId = require('mongoose').Types.ObjectId;
@@ -75,13 +75,5 @@ exports.deleteUser = async function (req, res) {
         return res.status(200).json({status: 200, data: deletedUser, message: `Der Benutzer mit der Id '${id}' wurde erfolgreich entfernt.`});
     } catch (ex) {
         return res.status(ex.status || 400).json({status: ex.status || 400, name: ex.name, message: 'Beim Entfernen des Benutzers ist ein Fehler aufgetreten: ' + ex.message});
-    }
-};
-
-exports.login = async function (req, res) {
-    try {
-        util.handleLogin(req, res);
-    } catch (ex) {
-        return res.status(ex.status || 400).json({ status: ex.status || 400, name: ex.name, message: 'Die Anmeldung konnte nicht erfolgreich durchgeführt werden. ' + ex.message });
     }
 };

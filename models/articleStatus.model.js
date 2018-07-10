@@ -7,7 +7,7 @@ const ObjectId = mongoose.Schema.ObjectId;
 const articleStatusSchema = mongoose.Schema(
     {
         _id:        { type: String },
-        name:       { type: String, reqiured: true, unique: true }
+        name:       { type: String, required: true, unique: true }
     },
     { collection: 'articleStatus', timestamps: true }
 );

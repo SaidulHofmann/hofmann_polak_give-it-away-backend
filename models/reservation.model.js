@@ -31,7 +31,7 @@ reservationSchema.statics.findByUserIdAndArticleId = async function (userId, art
         if (!reservation) { return false; }
         return reservation;
     } catch (ex) {
-        throw Error("Error occured while retrieving the reservation. " + ex.message);
+        throw ex;
     }
 };
 

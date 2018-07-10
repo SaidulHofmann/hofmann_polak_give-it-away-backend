@@ -46,6 +46,6 @@ exports.createInitialDbEntries = async function () {
 
         console.log('Die initialen Datenbank-Einträge für die Collection ArticleStatus wurden erfolgreich erstellt.');
     } catch(ex) {
-        throw Error('Fehler bei der Erstellung der initialen Datenbank-Einträge für die Collection ArticleStatus: ' + ex.message);
+        throw Error('Fehler bei der Erstellung der initialen Datenbank-Einträge für die Collection ArticleStatus:\n' + ex.stack);
     }
 };

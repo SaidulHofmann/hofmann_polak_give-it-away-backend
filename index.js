@@ -37,14 +37,7 @@ require('./models/index.model.js');
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Database connection error:'));
 db.once('open', function() {
-    console.log('Connected to Database.');
-    // Create initial db entries
-    // try {
-    //     const dataModel = require('./models/data.model');
-    //     dataModel.createInitialDbEntries();
-    // } catch(ex){
-    //     console.log(ex.message);
-    // }
+    console.log(`Connected to Database ${db.name} at ${db.host}:${db.port}.`);
 });
 
 // Middleware configuration

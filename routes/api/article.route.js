@@ -1,4 +1,4 @@
-// Article routes. Contains route definitons relative to api/articles.
+// Article routes. Contains route definitions relative to api/articles.
 
 const express = require('express');
 const router = express.Router();

@@ -33,10 +33,7 @@ function handleLogin(req, res) {
     else {
         userService.authenticate(req.body.email, req.body.pwd, function (err, user, valid) {
             if (valid) {
-                createSessionToken(user,
-                    req.app.get("jwt-secret"),
-                    req.app.get("jwt-sign"),
-                    (token) => {
+                createSessionToken(user, req.app.get("jwt-secret"), req.app.get("jwt-sign"), (token) => {
                     user.authToken = token;
                     res.status(201).json({status: 201, data: user, message: "Der Anmeldevorgang wurde erfolgreich abgeschlossen."});
                 });
@@ -45,7 +42,7 @@ function handleLogin(req, res) {
                 res.status(401).json({status: 401, name: err.name,  message: 'Bei der Anmeldung ist ein Fehler aufgetreten. ' +err.message});
             }
             else {
-                res.status(401).json({status: 401, name: 'Error', message: 'Der Anmeldevorgang war nicht erfolgreich.'});
+                res.status(401).json({status: 401, name: 'Error', message: 'E-Mail oder Passwort ungültig.'});
             }
         });
     }

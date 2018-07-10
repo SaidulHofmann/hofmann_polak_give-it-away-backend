@@ -1,7 +1,7 @@
 // Article controller. Handles article api requests.
 
 const ArticleService = require('../services/article.service');
-const helper = require('../util/helper');
+const helper = require('../utils/helper');
 const customErrors = require('../core/errors.core.js');
 const ArgumentError = customErrors.ArgumentError;
 

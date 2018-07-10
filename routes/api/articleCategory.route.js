@@ -1,4 +1,4 @@
-// Article category routes. Contains route definitons relative to api/articleCategories.
+// Article category routes. Contains route definitions relative to api/articleCategories.
 
 const express = require('express');
 const router = express.Router();

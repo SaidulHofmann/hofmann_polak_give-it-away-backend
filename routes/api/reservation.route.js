@@ -1,4 +1,4 @@
-// Reservation routes. Contains route definitons relative to api/reservations.
+// Reservation routes. Contains route definitions relative to api/reservations.
 
 const express = require('express');
 const router = express.Router();
