@@ -4,6 +4,8 @@ const PermissionService = require('../services/permission.service');
 const Permission = require('../models/permission.model');
 const customErrors = require('../core/errors.core.js');
 const ArgumentError = customErrors.ArgumentError;
+const ObjectId = require('mongoose').Types.ObjectId;
+const helper = require('../utils/helper');
 
 // Save the context of this module.
 _this = this;
@@ -21,7 +23,7 @@ exports.getPermissions = async function (req, res, next) {
         if(filter) {
             let filterExp = new RegExp(filter, "i");
             query = { $or:
-                    [ { name: filterExp }, { isPredefined: filterExp }, { _id: ObjectId.isValid(filter) ? ObjectId(filter) : undefined } ]
+                    [ { name: filterExp }, { isPredefined: helper.getBooleanOrUndefined(filter) }, { _id: ObjectId.isValid(filter) ? ObjectId(filter) : undefined } ]
             };
         }
 

@@ -42,3 +42,13 @@ exports.getUser = function(req) {
     let decodedToken = jwt.decode(token);
     return decodedToken;
 };
+
+exports.getBooleanOrUndefined = function(stringValue) {
+    if (typeof stringValue !== 'string') { return undefined }
+
+    if (stringValue.toLowerCase() == 'true') { return true; }
+    if (stringValue == '1') { return true; }
+    if (stringValue.toLowerCase() == 'false') { return false; }
+    if (stringValue == '0') { return false; }
+    return undefined;
+};
