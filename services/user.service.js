@@ -46,12 +46,7 @@ async function publicCreateUser(jsonUser) {
 async function publicUpdateUser(jsonUser) {
     let oldUser = await User.findById(jsonUser._id).populateAll();
     if (!oldUser) { throw customErrors.ArgumentError(`Der Benutzer mit der Id '${jsonUser._id}' wurde nicht gefunden.`); }
-
-    // Check if email changed and duplicate exists.
-    let userWithSameEmail = await User.findOne({email: jsonUser.email});
-    if(userWithSameEmail && ! userWithSameEmail._id.equals(jsonUser._id)) {
-        throw new customErrors.DuplicateKeyError(`Die E-Mail Adresse '${jsonUser.email}' wird bereits verwendet. Wählen Sie bitte eine andere E-Mail Adresse.`);
-    }
+    await checkDuplicateUser(jsonUser);
 
     let oldPasswordHash = oldUser.password;
     Object.assign(oldUser, jsonUser);
@@ -78,22 +73,30 @@ async function publicCreateInitialDbEntries() {
     try {
         await this.createUser({
             _id: '5abc0267d608821850991037',
-            email: 'testuser1@testuser.com',
-            password: 'Hans',
+            email: 'hm@hm.com',
+            password: 'hans',
             firstname: 'Hans',
             lastname: 'Muster',
             permission: '5b35430567dfb9160c2532bf'
         });
         await this.createUser({
             _id: '5abc0267d608821850991038',
-            email: 'testuser2@testuser.com',
-            password: 'Felix',
+            email: 'fm@fm.com',
+            password: 'felix',
             firstname: 'Felix',
             lastname: 'Meier',
             permission: '5b35430867dfb9160c2532c0'
         });
         await this.createUser({
             _id: '5abc0267d608821850991039',
+            email: 'admin@admin.com',
+            password: 'admin',
+            firstname: 'admin',
+            lastname: 'admin',
+            permission: '5b35430a67dfb9160c2532c1'
+        });
+        await this.createUser({
+            _id: '5abc0267d608821850991040',
             email: 'sh@sh.com',
             password: 'saidul',
             firstname: 'Saidul',

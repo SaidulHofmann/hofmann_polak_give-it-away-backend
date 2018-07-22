@@ -21,6 +21,11 @@ const permissionSchema = mongoose.Schema(
         userRead:               { type: Boolean, required: true, default: false },
         userUpdate:             { type: Boolean, required: true, default: false },
         userDelete:             { type: Boolean, required: true, default: false },
+
+        permissionCreate:       { type: Boolean, required: true, default: false },
+        permissionRead:         { type: Boolean, required: true, default: false },
+        permissionUpdate:       { type: Boolean, required: true, default: false },
+        permissionDelete:       { type: Boolean, required: true, default: false },
     },
     { collection: 'permissions', timestamps: true }
 );

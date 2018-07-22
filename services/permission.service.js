@@ -20,6 +20,7 @@ exports.getPermissionById = async function (id) {
 };
 
 exports.createPermission = async function (jsonPermission) {
+    await checkDuplicatePermission(jsonPermission);
     let newPermission = new Permission(jsonPermission);
     return newPermission.save();
 };
@@ -27,6 +28,7 @@ exports.createPermission = async function (jsonPermission) {
 exports.updatePermission = async function (jsonPermission) {
     let oldPermission = await Permission.findById(jsonPermission._id);
     if (!oldPermission) { throw ArgumentError(`Der Berechtigungs-Eintrag mit der Id '${jsonPermission._id}' wurde nicht gefunden.`); }
+    await checkDuplicatePermission(jsonPermission);
 
     Object.assign(oldPermission, jsonPermission);
     return oldPermission.save();
@@ -37,6 +39,13 @@ exports.deletePermission = async function (id) {
     if (!permission) { throw ArgumentError(`Der Berechtigungs-Eintrag mit der Id '${id}' wurde nicht gefunden.`); }
     return permission.remove();
 };
+
+async function checkDuplicatePermission(jsonPermission) {
+    let permissionWithSameName = await Permission.findOne({name: jsonPermission.name});
+    if(permissionWithSameName && ! permissionWithSameName._id.equals(jsonPermission._id)) {
+        throw new customErrors.DuplicateKeyError(`Der Berechtigungs-Eintrag '${jsonPermission.name}' existiert bereits. Wählen Sie bitte eine andere Bezeichnung.`);
+    }
+}
 
 exports.createInitialDbEntries = async function () {
     try {
@@ -58,6 +67,11 @@ exports.createInitialDbEntries = async function () {
             userRead:               false,
             userUpdate:             false,
             userDelete:             false,
+
+            permissionCreate:       false,
+            permissionRead:         false,
+            permissionUpdate:       false,
+            permissionDelete:       false,
         });
 
         await this.createPermission({
@@ -78,6 +92,11 @@ exports.createInitialDbEntries = async function () {
             userRead:               true,
             userUpdate:             false,
             userDelete:             false,
+
+            permissionCreate:       false,
+            permissionRead:         true,
+            permissionUpdate:       false,
+            permissionDelete:       false,
         });
 
         await this.createPermission({
@@ -98,6 +117,36 @@ exports.createInitialDbEntries = async function () {
             userRead:               true,
             userUpdate:             true,
             userDelete:             true,
+
+            permissionCreate:       true,
+            permissionRead:         true,
+            permissionUpdate:       true,
+            permissionDelete:       true,
+        });
+
+        await this.createPermission({
+            _id: '5b35430867dfb9160c2532c0',
+            name:                   'Supervisor',
+            isPredefined:           false,
+
+            articleOwnCreate:       true,
+            articleOwnUpdate:       true,
+            articleOwnDelete:       true,
+            articleOwnDonate:       true,
+
+            articleOtherUpdate:     false,
+            articleOtherDelete:     false,
+            articleOtherDonate:     false,
+
+            userCreate:             false,
+            userRead:               true,
+            userUpdate:             false,
+            userDelete:             false,
+
+            permissionCreate:       false,
+            permissionRead:         true,
+            permissionUpdate:       false,
+            permissionDelete:       false,
         });
 
         console.log('Die initialen Datenbank-Einträge für die Collection Permission wurden erfolgreich erstellt.');
