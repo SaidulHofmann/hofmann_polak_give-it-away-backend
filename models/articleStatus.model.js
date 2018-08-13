@@ -9,7 +9,7 @@ const articleStatusSchema = mongoose.Schema(
         _id:        { type: String },
         name:       { type: String, required: true, unique: true }
     },
-    { collection: 'articleStatus', timestamps: true }
+    { collection: 'articleStatus', timestamps: true, collation: { locale: 'de', strength: 1 } }
 );
 
 

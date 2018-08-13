@@ -27,7 +27,7 @@ const permissionSchema = mongoose.Schema(
         permissionUpdate:       { type: Boolean, required: true, default: false },
         permissionDelete:       { type: Boolean, required: true, default: false },
     },
-    { collection: 'permissions', timestamps: true }
+    { collection: 'permissions', timestamps: true, collation: { locale: 'de', strength: 1 } }
 );
 
 permissionSchema.plugin(mongoosePaginate);

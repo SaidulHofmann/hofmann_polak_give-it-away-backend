@@ -20,7 +20,7 @@ const articleSchema = mongoose.Schema(
         category:               { type: String, ref: 'ArticleCategory', required: true },
         status:                 { type: String, ref: 'ArticleStatus', required: true }
     },
-    { collection: 'articles', timestamps: true, toObject: { virtuals: true }, toJSON: { virtuals: true } }
+    { collection: 'articles', timestamps: true, toObject: { virtuals: true }, toJSON: { virtuals: true }, collation: { locale: 'de', strength: 1 } }
 );
 
 articleSchema.statics.populateAllOptions = [

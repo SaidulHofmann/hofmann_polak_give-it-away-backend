@@ -14,7 +14,7 @@ const userSchema = mongoose.Schema(
         permission: { type: ObjectId, ref: 'Permission', required: true }
 
     },
-    { collection: 'users', timestamps: true, toObject: { virtuals: true }, toJSON: { virtuals: true }  }
+    { collection: 'users', timestamps: true, toObject: { virtuals: true }, toJSON: { virtuals: true }, collation: { locale: 'de', strength: 1 } }
 );
 
 userSchema.virtual('fullname').

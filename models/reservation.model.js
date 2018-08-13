@@ -11,7 +11,7 @@ const reservationSchema = mongoose.Schema(
         commentPublisher:       { type: String },
         commentApplicant:       { type: String }
     },
-    { collection: 'reservations', timestamps: true }
+    { collection: 'reservations', timestamps: true, collation: { locale: 'de', strength: 1 } }
 );
 
 reservationSchema.index({ article: 1, user: 1 }, { unique: true });
