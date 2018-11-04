@@ -6,6 +6,7 @@ const Reservation = new require('../models/reservation.model');
 const userInfo = require('../utils/helper');
 const customErrors = require('../core/errors.core.js');
 const ArgumentError = customErrors.ArgumentError;
+const FileService = require('../services/file.service');
 
 // Save the context of this module.
 _this = this;
@@ -88,10 +89,12 @@ exports.updateArticle = async function (jsonArticle) {
     return oldArticle.save();
 };
 
-exports.deleteArticle = async function (id) {
-    let article = await Article.findById(id).populateAll();
-    if (!article) { throw ArgumentError(`Der Artikel mit der Id '${id}' wurde nicht gefunden.`); }
-    return article.remove();
+exports.deleteArticle = async function (articleId) {
+    let article = await Article.findById(articleId).populateAll();
+    if (!article) { throw ArgumentError(`Der Artikel mit der Id '${articleId}' wurde nicht gefunden.`); }
+    let deletedArticle = await article.remove();
+    await FileService.deleteArticleImageFolder(articleId);
+    return deletedArticle;
 };
 
 exports.createInitialDbEntries = async function () {
@@ -102,13 +105,13 @@ exports.createInitialDbEntries = async function () {
             name:               "Motorrad 1",
             description:        "Yamaha 1000ccm",
             handover:           "Abholung durch den Kunden.",
-            pictureOverview:    "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Yamaha_img_2227.jpg/1200px-Yamaha_img_2227.jpg",
+            pictureOverview:    "Yamaha_img_2227.jpg",
             pictures:           [
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Yamaha_img_2227.jpg/1200px-Yamaha_img_2227.jpg",
-                "http://www.motorcyclespecs.co.za/Gallery%20%20A/Yamaha%20XS650B%2075%20%201.jpg",
-                "http://nippon-classic.de/wp-content/uploads/2015/07/Yamaha_XS650_1970-1978_0018_YME1-1024x812.jpg",
-                "http://nippon-classic.de/wp-content/uploads/2015/07/Yamaha_XS650_1970-1978_0019_YME.jpg",
-                "https://i.ytimg.com/vi/51h-ESZqIKg/maxresdefault.jpg"
+                "Yamaha_img_2227.jpg",
+                "Yamaha_XS650B_75_1.jpg",
+                "Yamaha_XS650_1970-1978_0018_YME1-1024x812.jpg",
+                "Yamaha_XS650_1970-1978_0019_YME.jpg",
+                "Yamaha-XS650.jpg"
                                 ],
             videos:             [],
             tags:               "Motorrad, Yamaha, Yamaha 1000ccm",
@@ -126,13 +129,13 @@ exports.createInitialDbEntries = async function () {
             name:               "Motorrad 2",
             description:        "Yamaha 2000ccm",
             handover:           "Abholung durch den Kunden.",
-            pictureOverview:    "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Yamaha_img_2227.jpg/1200px-Yamaha_img_2227.jpg",
+            pictureOverview:    "Yamaha_img_2227.jpg",
             pictures:           [
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Yamaha_img_2227.jpg/1200px-Yamaha_img_2227.jpg",
-                "http://www.motorcyclespecs.co.za/Gallery%20%20A/Yamaha%20XS650B%2075%20%201.jpg",
-                "http://nippon-classic.de/wp-content/uploads/2015/07/Yamaha_XS650_1970-1978_0018_YME1-1024x812.jpg",
-                "http://nippon-classic.de/wp-content/uploads/2015/07/Yamaha_XS650_1970-1978_0019_YME.jpg",
-                "https://i.ytimg.com/vi/51h-ESZqIKg/maxresdefault.jpg"
+                "Yamaha_img_2227.jpg",
+                "Yamaha_XS650B_75_1.jpg",
+                "Yamaha_XS650_1970-1978_0018_YME1-1024x812.jpg",
+                "Yamaha_XS650_1970-1978_0019_YME.jpg",
+                "Yamaha-XS650.jpg"
             ],
             videos:             [],
             tags:               "Motorrad, Yamaha, Yamaha 2000ccm",
@@ -150,13 +153,13 @@ exports.createInitialDbEntries = async function () {
             name:               "Motorrad 3",
             description:        "Yamaha 3000ccm",
             handover:           "Abholung durch den Kunden.",
-            pictureOverview:    "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Yamaha_img_2227.jpg/1200px-Yamaha_img_2227.jpg",
+            pictureOverview:    "Yamaha_img_2227.jpg",
             pictures:           [
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Yamaha_img_2227.jpg/1200px-Yamaha_img_2227.jpg",
-                "http://www.motorcyclespecs.co.za/Gallery%20%20A/Yamaha%20XS650B%2075%20%201.jpg",
-                "http://nippon-classic.de/wp-content/uploads/2015/07/Yamaha_XS650_1970-1978_0018_YME1-1024x812.jpg",
-                "http://nippon-classic.de/wp-content/uploads/2015/07/Yamaha_XS650_1970-1978_0019_YME.jpg",
-                "https://i.ytimg.com/vi/51h-ESZqIKg/maxresdefault.jpg"
+                "Yamaha_img_2227.jpg",
+                "Yamaha_XS650B_75_1.jpg",
+                "Yamaha_XS650_1970-1978_0018_YME1-1024x812.jpg",
+                "Yamaha_XS650_1970-1978_0019_YME.jpg",
+                "Yamaha-XS650.jpg"
             ],
             videos:             [],
             tags:               "Motorrad, Yamaha, Yamaha 3000",
@@ -174,13 +177,13 @@ exports.createInitialDbEntries = async function () {
             name:               "Motorrad 4",
             description:        "Yamaha 4000ccm",
             handover:           "Abholung durch den Kunden.",
-            pictureOverview:    "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Yamaha_img_2227.jpg/1200px-Yamaha_img_2227.jpg",
+            pictureOverview:    "Yamaha_img_2227.jpg",
             pictures:           [
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Yamaha_img_2227.jpg/1200px-Yamaha_img_2227.jpg",
-                "http://www.motorcyclespecs.co.za/Gallery%20%20A/Yamaha%20XS650B%2075%20%201.jpg",
-                "http://nippon-classic.de/wp-content/uploads/2015/07/Yamaha_XS650_1970-1978_0018_YME1-1024x812.jpg",
-                "http://nippon-classic.de/wp-content/uploads/2015/07/Yamaha_XS650_1970-1978_0019_YME.jpg",
-                "https://i.ytimg.com/vi/51h-ESZqIKg/maxresdefault.jpg"
+                "Yamaha_img_2227.jpg",
+                "Yamaha_XS650B_75_1.jpg",
+                "Yamaha_XS650_1970-1978_0018_YME1-1024x812.jpg",
+                "Yamaha_XS650_1970-1978_0019_YME.jpg",
+                "Yamaha-XS650.jpg"
             ],
             videos:             [],
             tags:               "Motorrad, Yamaha, Yamaha 4000ccm",
@@ -198,13 +201,13 @@ exports.createInitialDbEntries = async function () {
             name:               "Motorrad 5",
             description:        "Yamaha 5000ccm",
             handover:           "Abholung durch den Kunden.",
-            pictureOverview:    "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Yamaha_img_2227.jpg/1200px-Yamaha_img_2227.jpg",
+            pictureOverview:    "Yamaha_img_2227.jpg",
             pictures:           [
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Yamaha_img_2227.jpg/1200px-Yamaha_img_2227.jpg",
-                "http://www.motorcyclespecs.co.za/Gallery%20%20A/Yamaha%20XS650B%2075%20%201.jpg",
-                "http://nippon-classic.de/wp-content/uploads/2015/07/Yamaha_XS650_1970-1978_0018_YME1-1024x812.jpg",
-                "http://nippon-classic.de/wp-content/uploads/2015/07/Yamaha_XS650_1970-1978_0019_YME.jpg",
-                "https://i.ytimg.com/vi/51h-ESZqIKg/maxresdefault.jpg"
+                "Yamaha_img_2227.jpg",
+                "Yamaha_XS650B_75_1.jpg",
+                "Yamaha_XS650_1970-1978_0018_YME1-1024x812.jpg",
+                "Yamaha_XS650_1970-1978_0019_YME.jpg",
+                "Yamaha-XS650.jpg"
             ],
             videos:             [],
             tags:               "Motorrad, Yamaha, Yamaha 5000ccm",

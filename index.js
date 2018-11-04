@@ -8,7 +8,7 @@
 // Declarations
 //-----------------------------------------------------------------------------
 const express = require('express');
-const app = express();
+const server = express();
 const path = require('path');
 const favicon = require('serve-favicon');
 const logger = require('morgan');
@@ -20,9 +20,9 @@ const jwtSecret = 'aklsdjfklöasjdcma8sd90mcklasdföasdf$ädasöfü pi340qkrlöa
 
 // Application settings
 //-----------------------------------------------------------------------------
-app.set("jwt-secret", jwtSecret); //secret should be in a config file - or better be a private key!
-app.set("jwt-sign", {expiresIn: "1d", audience: "self", issuer: "myself"});
-app.set("jwt-validate", {secret: jwtSecret, audience: "self", issuer: "myself"});
+server.set("jwt-secret", jwtSecret); //secret should be in a config file - or better be a private key!
+server.set("jwt-sign", {expiresIn: "1d", audience: "self", issuer: "myself"});
+server.set("jwt-validate", {secret: jwtSecret, audience: "self", issuer: "myself"});
 
 
 // Database Connection
@@ -42,18 +42,19 @@ db.once('open', function() {
 
 // Middleware configuration
 //-----------------------------------------------------------------------------
-app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, '/../hofmann_polak_give-it-away-frontend/dist-prod')));
+server.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+server.use(logger('dev'));
+server.use(bodyParser.json());
+server.use(cookieParser());
+server.use(express.static(path.join(__dirname, '/../hofmann_polak_give-it-away-frontend/dist-prod')));
+server.use("/public", express.static(__dirname + "/public"));
 
 
 // Routing
 //-----------------------------------------------------------------------------
 
 // CORS configuration - add headers.
-app.use(function (req, res, next) {
+server.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'authorization, Content-Type, Accept, Origin, X-Requested-With');
@@ -63,19 +64,19 @@ app.use(function (req, res, next) {
 
 // User and general routes.
 //-------------------------
-app.get("/", function (req, res) {
+server.get("/", function (req, res) {
     res.sendFile("index.html", {root: __dirname + '/../hofmann_polak_give-it-away-frontend/dist-prod/'});
 });
-app.use("/", require('./routes/unprotected.route'));
-app.use(jwt(app.get("jwt-validate"))); //after this middleware a token is required!
+server.use("/", require('./routes/unprotected.route'));
+server.use(jwt(server.get("jwt-validate"))); //after this middleware a token is required!
 
 
 // API routes for all routes matching /api.
 //-------------------------------------------
-app.use('/api', require('./routes/api.route'));
+server.use('/api', require('./routes/api.route'));
 
 
-app.use(function (err, req, res, next) {
+server.use(function (err, req, res, next) {
     if (err.name === 'UnauthorizedError') {
         res.status(401).json({status: 401, name: err.name,
             message: 'Zugriff verweigert weil nicht angemeldet oder Anmeldung abgelaufen.'});
@@ -90,8 +91,10 @@ app.use(function (err, req, res, next) {
 //-----------------------------------------------------------------------------
 const hostname = '127.0.0.1';
 const port = 3003;
-app.listen(port, hostname, () => {
-    console.log(`Server running at http://${hostname}:${port}/`);
+server.listen(port, hostname, () => {
+    console.log('----------------------------------------------------------------------');
+    console.log(`Node ${process.version} with express server running at http://${hostname}:${port}/`);
+    console.log('----------------------------------------------------------------------');
 });
 
 
