@@ -5,13 +5,14 @@ const fs = require('fs');
 const path = require('path');
 const imageDir = path.join(__dirname, '../public/images');
 const customErrors = require('../core/errors.core.js');
+const globals = require('../core/globals.core.js');
 const ArgumentError = customErrors.ArgumentError;
 
 
 exports.uploadImage = async function (req) {
     return new Promise((resolve, reject) => {
         let form = new IncomingForm();
-        form.maxFileSize = 2 * 1024 * 1024; // 2 MB.
+        form.maxFileSize = globals.maxImageFileSize;
 
         form.parse(req, function (err, fields, files) {
             if (err) { reject(err); return; }
@@ -78,7 +79,7 @@ exports.deleteArticleImageFolder = async function (articleId) {
                 fs.unlinkSync(`${filePath}/${file}`);
             });
             fs.rmdirSync(filePath);
-            console.log(`Artikel Bild-Verzeichnis entfernt: '${filePath}'.`);
+            console.log(`Artikel Bild-Verzeichnis wurde entfernt: '${filePath}'.`);
         }
     } catch (ex) {
         console.log(`Fehler beim Entfernen des Artikel Bild-Verzeichnis '${filePath}': ${ex.message}`);

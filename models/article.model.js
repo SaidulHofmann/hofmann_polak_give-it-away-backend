@@ -6,12 +6,11 @@ const ObjectId = mongoose.Schema.ObjectId;
 
 const articleSchema = mongoose.Schema(
     {
-        name:                   { type: String, required: true, index: true, trim: true },
+        name:                   { type: String, required: true, trim: true },
         description:            { type: String, required: true, trim: true },
         handover:               { type: String, required: true, trim: true },
-        pictureOverview:        { type: String, trim: true}, // required
-        pictures:               { type: [String] },
-        videos:                 { type: [String] },
+        overviewImage:          { type: String, trim: true}, // required
+        additionalImages:       { type: [String] },
         tags:                   { type: String, trim: true },
         donationDate:           { type: Date },
 
@@ -22,6 +21,8 @@ const articleSchema = mongoose.Schema(
     },
     { collection: 'articles', timestamps: true, toObject: { virtuals: true }, toJSON: { virtuals: true }, collation: { locale: 'de', strength: 1 } }
 );
+
+articleSchema.index({ name: 'text', tags: 'text', description: 'text' });
 
 articleSchema.statics.populateAllOptions = [
     { path: 'publisher', select: 'firstname lastname fullname' },

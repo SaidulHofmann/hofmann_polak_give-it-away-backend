@@ -23,7 +23,7 @@ function createSessionToken(user, secret, options, callback) {
     if (!user) {
         return "";
     }
-    jwt.sign({email: user.email, _id: user._id}, secret, options, (err, token) => callback(token));
+    jwt.sign({_id: user._id, email: user.email, permission: user.permission}, secret, options, (err, token) => callback(token));
 }
 
 function handleLogin(req, res) {

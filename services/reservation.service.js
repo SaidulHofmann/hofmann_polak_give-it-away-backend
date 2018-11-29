@@ -50,26 +50,29 @@ exports.deleteReservation = async function (id) {
 
 exports.createInitialDbEntries = async function () {
     try {
+        // Reservation 1
         await this.createReservation({
             _id: '5aa04b1ac63b9823b81e4780',
             article: '5a9e4e65bdd7751e5033123f',
-            user: '5a97bc25bba7ce18c0812d0a',
+            user: '5abc0267d608821850991038',
             commentPublisher: '',
             commentApplicant: 'Ich brauche das Motorrad für den Arbeitsweg.'
         });
 
+        // Reservation 2
         await this.createReservation({
             _id: '5aa04b1bc63b9823b81e4781',
             article: '5a9e4e65bdd7751e50331240',
-            user: '5a97bc25bba7ce18c0812d0a',
+            user: '5abc0267d608821850991038',
             commentPublisher: '',
             commentApplicant: 'Ich bin ein Fan von Yamaha Motorräder.'
         });
 
+        // Reservation 3
         await this.createReservation({
             _id: '5aa04b1bc63b9823b81e4782',
             article: '5a9e4e65bdd7751e50331241',
-            user: '5a97c0bcbba7ce18c0812d0b',
+            user: '5abc0267d608821850991037',
             commentPublisher: 'Motorrad fahren ist nicht wirklich anstrengend. Es gibt bessere Aktivitäten um körperlich fit zu bleiben.',
             commentApplicant: 'Ich brauche Ausgleich zu meinem Büro Job.'
         });

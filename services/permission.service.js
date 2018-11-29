@@ -125,7 +125,7 @@ exports.createInitialDbEntries = async function () {
         });
 
         await this.createPermission({
-            _id: '5b35430867dfb9160c2532c0',
+            _id: '5b35430867dfb9160c2532c2',
             name:                   'Supervisor',
             isPredefined:           false,
 

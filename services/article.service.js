@@ -21,7 +21,7 @@ exports.getArticles = async function (userId, jsonParams) {
     if (jsonParams.name) { query.name = jsonParams.name };
     if (jsonParams.category && jsonParams.category !== 'undefined') { query.category = jsonParams.category };
     if (jsonParams.status && jsonParams.status !== 'undefined') { query.status = jsonParams.status };
-    if (jsonParams.tags) { query.tags = jsonParams.tags };
+    if (jsonParams.tags) { query.$text = { $search: jsonParams.tags} };
     if (selectPublishedArticles) { query.publisher = userId };
 
     let options = {};
@@ -105,15 +105,14 @@ exports.createInitialDbEntries = async function () {
             name:               "Motorrad 1",
             description:        "Yamaha 1000ccm",
             handover:           "Abholung durch den Kunden.",
-            pictureOverview:    "Yamaha_img_2227.jpg",
-            pictures:           [
+            overviewImage:    "Yamaha_img_2227.jpg",
+            additionalImages:           [
                 "Yamaha_img_2227.jpg",
                 "Yamaha_XS650B_75_1.jpg",
                 "Yamaha_XS650_1970-1978_0018_YME1-1024x812.jpg",
                 "Yamaha_XS650_1970-1978_0019_YME.jpg",
                 "Yamaha-XS650.jpg"
                                 ],
-            videos:             [],
             tags:               "Motorrad, Yamaha, Yamaha 1000ccm",
             donationDate:       null,
 
@@ -129,15 +128,14 @@ exports.createInitialDbEntries = async function () {
             name:               "Motorrad 2",
             description:        "Yamaha 2000ccm",
             handover:           "Abholung durch den Kunden.",
-            pictureOverview:    "Yamaha_img_2227.jpg",
-            pictures:           [
+            overviewImage:    "Yamaha_img_2227.jpg",
+            additionalImages:           [
                 "Yamaha_img_2227.jpg",
                 "Yamaha_XS650B_75_1.jpg",
                 "Yamaha_XS650_1970-1978_0018_YME1-1024x812.jpg",
                 "Yamaha_XS650_1970-1978_0019_YME.jpg",
                 "Yamaha-XS650.jpg"
             ],
-            videos:             [],
             tags:               "Motorrad, Yamaha, Yamaha 2000ccm",
             donationDate:       null,
 
@@ -153,19 +151,18 @@ exports.createInitialDbEntries = async function () {
             name:               "Motorrad 3",
             description:        "Yamaha 3000ccm",
             handover:           "Abholung durch den Kunden.",
-            pictureOverview:    "Yamaha_img_2227.jpg",
-            pictures:           [
+            overviewImage:    "Yamaha_img_2227.jpg",
+            additionalImages:           [
                 "Yamaha_img_2227.jpg",
                 "Yamaha_XS650B_75_1.jpg",
                 "Yamaha_XS650_1970-1978_0018_YME1-1024x812.jpg",
                 "Yamaha_XS650_1970-1978_0019_YME.jpg",
                 "Yamaha-XS650.jpg"
             ],
-            videos:             [],
             tags:               "Motorrad, Yamaha, Yamaha 3000",
             donationDate:       null,
 
-            publisher:          '5abc0267d608821850991037',
+            publisher:          '5abc0267d608821850991038',
             donee:              '',
             category:           "mobility",
             status:             "available"
@@ -177,15 +174,14 @@ exports.createInitialDbEntries = async function () {
             name:               "Motorrad 4",
             description:        "Yamaha 4000ccm",
             handover:           "Abholung durch den Kunden.",
-            pictureOverview:    "Yamaha_img_2227.jpg",
-            pictures:           [
+            overviewImage:    "Yamaha_img_2227.jpg",
+            additionalImages:           [
                 "Yamaha_img_2227.jpg",
                 "Yamaha_XS650B_75_1.jpg",
                 "Yamaha_XS650_1970-1978_0018_YME1-1024x812.jpg",
                 "Yamaha_XS650_1970-1978_0019_YME.jpg",
                 "Yamaha-XS650.jpg"
             ],
-            videos:             [],
             tags:               "Motorrad, Yamaha, Yamaha 4000ccm",
             donationDate:       null,
 
@@ -201,15 +197,14 @@ exports.createInitialDbEntries = async function () {
             name:               "Motorrad 5",
             description:        "Yamaha 5000ccm",
             handover:           "Abholung durch den Kunden.",
-            pictureOverview:    "Yamaha_img_2227.jpg",
-            pictures:           [
+            overviewImage:    "Yamaha_img_2227.jpg",
+            additionalImages:           [
                 "Yamaha_img_2227.jpg",
                 "Yamaha_XS650B_75_1.jpg",
                 "Yamaha_XS650_1970-1978_0018_YME1-1024x812.jpg",
                 "Yamaha_XS650_1970-1978_0019_YME.jpg",
                 "Yamaha-XS650.jpg"
             ],
-            videos:             [],
             tags:               "Motorrad, Yamaha, Yamaha 5000ccm",
             donationDate:       null,
 
