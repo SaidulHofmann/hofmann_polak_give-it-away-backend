@@ -89,7 +89,7 @@ server.use(function (err, req, res, next) {
 
 // Start Webserver
 //-----------------------------------------------------------------------------
-const hostname = '127.0.0.1';
+const hostname = 'localhost';
 const port = 3003;
 server.listen(port, hostname, () => {
     console.log('----------------------------------------------------------------------');

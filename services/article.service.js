@@ -1,6 +1,7 @@
 // Article service. Contains CRUD operations and business logic functions.
 
 const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 const Article = new require('../models/article.model');
 const Reservation = new require('../models/reservation.model');
 const userInfo = require('../utils/helper');
@@ -101,117 +102,187 @@ exports.createInitialDbEntries = async function () {
     try {
         // Article 1
         await this.createArticle(new Article({
-            _id:                "5a9e4e65bdd7751e5033123f",
-            name:               "Motorrad 1",
-            description:        "Yamaha 1000ccm",
-            handover:           "Abholung durch den Kunden.",
-            overviewImage:    "Yamaha_img_2227.jpg",
-            additionalImages:           [
+            "_id" : ObjectId("5a9e4e65bdd7751e5033123f"),
+            "name" : "Motorrad  Yamaha 1000ccm",
+            "description" : "Motorrad Yamaha 1000ccm zu verschenken.\nEs ist bereits 10 Jahre alt, unfallfrei und hat 60'000 km auf dem Zähler. \n\nNennen Sie mir einen guten Grund, weshalb ich als grosszügiger Mensch Ihnen dieses Motorrad verschenken soll.",
+            "handover" : "Abholung durch den Kunden.",
+            "overviewImage" : "Yamaha_img_2227.jpg",
+            "additionalImages" : [
                 "Yamaha_img_2227.jpg",
                 "Yamaha_XS650B_75_1.jpg",
                 "Yamaha_XS650_1970-1978_0018_YME1-1024x812.jpg",
                 "Yamaha_XS650_1970-1978_0019_YME.jpg",
                 "Yamaha-XS650.jpg"
-                                ],
-            tags:               "Motorrad, Yamaha, Yamaha 1000ccm",
-            donationDate:       null,
-
-            publisher:          '5abc0267d608821850991037',
-            donee:              null,
-            category:           "mobility",
-            status:             "available"
+            ],
+            "tags" : "Motorrad, Yamaha, Yamaha 1000ccm",
+            "donationDate" : null,
+            "publisher" : ObjectId("5abc0267d608821850991037"),
+            "donee" : null,
+            "category" : "mobility",
+            "status" : "available"
         }));
 
         // Article 2
         await this.createArticle(new Article({
-            _id:                "5a9e4e65bdd7751e50331240",
-            name:               "Motorrad 2",
-            description:        "Yamaha 2000ccm",
-            handover:           "Abholung durch den Kunden.",
-            overviewImage:    "Yamaha_img_2227.jpg",
-            additionalImages:           [
-                "Yamaha_img_2227.jpg",
-                "Yamaha_XS650B_75_1.jpg",
-                "Yamaha_XS650_1970-1978_0018_YME1-1024x812.jpg",
-                "Yamaha_XS650_1970-1978_0019_YME.jpg",
-                "Yamaha-XS650.jpg"
+            "_id" : ObjectId("5c11625d029f1e1b6895d560"),
+            "name" : "Rasenmäher mit Elektromotor",
+            "description" : "Moderner Elektro-Rasenmäher zu verkaufen. Mit vollgeladenem Akku kann für die Dauer von 2h gemäht werden. Mähqualität entspricht englischem Rasen.\nZu verschenken wegen Umstellung des Gartens auf Biotop.",
+            "handover" : "Kann bei Interesse abgeholt werden.\nKontakt: fm@fm.com (Felix Muster).",
+            "overviewImage" : "rasenmaeher-01.jpg",
+            "additionalImages" : [
+                "rasenmaeher-02.jpg",
+                "rasenmaeher-03.jpg",
+                "rasenmaeher-04.jpg"
             ],
-            tags:               "Motorrad, Yamaha, Yamaha 2000ccm",
-            donationDate:       null,
-
-            publisher:          '5abc0267d608821850991037',
-            donee:              '',
-            category:           "mobility",
-            status:             "available"
+            "tags" : "Rasenmäher Elektro rot",
+            "donationDate" : null,
+            "publisher" : ObjectId("5abc0267d608821850991038"),
+            "donee" : ObjectId("5abc0267d608821850991037"),
+            "category" : "garden",
+            "status" : "handoverPending"
         }));
 
         // Article 3
         await this.createArticle(new Article({
-            _id:                "5a9e4e65bdd7751e50331241",
-            name:               "Motorrad 3",
-            description:        "Yamaha 3000ccm",
-            handover:           "Abholung durch den Kunden.",
-            overviewImage:    "Yamaha_img_2227.jpg",
-            additionalImages:           [
-                "Yamaha_img_2227.jpg",
-                "Yamaha_XS650B_75_1.jpg",
-                "Yamaha_XS650_1970-1978_0018_YME1-1024x812.jpg",
-                "Yamaha_XS650_1970-1978_0019_YME.jpg",
-                "Yamaha-XS650.jpg"
+            "_id" : ObjectId("5c1166bb029f1e1b6895d561"),
+            "name" : "Handy Samsung S7 Edge",
+            "description" : "Samsung S7 Edge Handy zu verschenken wegen Wechsel auf neueres Modell.\nBedingung: Nennen Sie mir einen überzeugenden Grund, weshalb ich das Handy Ihnen schenken soll.",
+            "handover" : "Kann nach Termin-Vereinbarung bei mir abgeholt werden.\nKontakt: fm@fm.com.(Felix Meier).",
+            "overviewImage" : "Samsung-S7-Edge-03.jpg",
+            "additionalImages" : [
+                "Samsung-S7-Edge-01.jpg",
+                "Samsung-S7-Edge-02.jpg",
+                "Samsung-S7-Edge-04.jpg"
             ],
-            tags:               "Motorrad, Yamaha, Yamaha 3000",
-            donationDate:       null,
-
-            publisher:          '5abc0267d608821850991038',
-            donee:              '',
-            category:           "mobility",
-            status:             "available"
+            "tags" : "Handy Telefon Samsung S7 Edge",
+            "donationDate" : null,
+            "publisher" : ObjectId("5abc0267d608821850991038"),
+            "donee" : null,
+            "category" : "electronics",
+            "status" : "available"
         }));
 
         // Article 4
         await this.createArticle(new Article({
-            _id:                "5a9e4e65bdd7751e50331242",
-            name:               "Motorrad 4",
-            description:        "Yamaha 4000ccm",
-            handover:           "Abholung durch den Kunden.",
-            overviewImage:    "Yamaha_img_2227.jpg",
-            additionalImages:           [
-                "Yamaha_img_2227.jpg",
-                "Yamaha_XS650B_75_1.jpg",
-                "Yamaha_XS650_1970-1978_0018_YME1-1024x812.jpg",
-                "Yamaha_XS650_1970-1978_0019_YME.jpg",
-                "Yamaha-XS650.jpg"
-            ],
-            tags:               "Motorrad, Yamaha, Yamaha 4000ccm",
-            donationDate:       null,
-
-            publisher:          '5abc0267d608821850991038',
-            donee:              '',
-            category:           "mobility",
-            status:             "available"
+            "_id" : ObjectId("5c116c8d029f1e1b6895d562"),
+            "name" : "Expander für Fitness-Übungen",
+            "description" : "Expander für Fitness-Übungen und zur Kräftigung der Arme zu verschenken. Machen Sie sich Fit für die Herausforderungen des Alltags !",
+            "handover" : "Kann bei mir abgeholt werden.\nKontakt: fm@fm.com (Felix Meier).",
+            "overviewImage" : "Fitness-Expander-01.jpg",
+            "additionalImages" : [],
+            "tags" : "Expander Fitness Training",
+            "donationDate" : null,
+            "publisher" : ObjectId("5abc0267d608821850991038"),
+            "donee" : null,
+            "category" : "health",
+            "status" : "available"
         }));
 
         // Article 5
         await this.createArticle(new Article({
-            _id:                "5a9e4e65bdd7751e50331243",
-            name:               "Motorrad 5",
-            description:        "Yamaha 5000ccm",
-            handover:           "Abholung durch den Kunden.",
-            overviewImage:    "Yamaha_img_2227.jpg",
-            additionalImages:           [
-                "Yamaha_img_2227.jpg",
-                "Yamaha_XS650B_75_1.jpg",
-                "Yamaha_XS650_1970-1978_0018_YME1-1024x812.jpg",
-                "Yamaha_XS650_1970-1978_0019_YME.jpg",
-                "Yamaha-XS650.jpg"
+            "_id" : ObjectId("5c1170a2029f1e1b6895d563"),
+            "name" : "Mountain Bike",
+            "description" : "Mountain Bike zu verschenken. Es ist 5 Jahre alt, aber in gutem Zustand.Man kommt von jedem Berg runter damit.",
+            "handover" : "Kann bei mir abgeholt werden.\nKontakt: fm@fm.com (Felix Muster).",
+            "overviewImage" : "Bike01.jpg",
+            "additionalImages" : [
+                "Bike02.jpg",
+                "Bike03.jpg"
             ],
-            tags:               "Motorrad, Yamaha, Yamaha 5000ccm",
-            donationDate:       null,
+            "tags" : "Mountain Bike Freizeit Sport",
+            "donationDate" : null,
+            "publisher" : ObjectId("5abc0267d608821850991038"),
+            "donee" : null,
+            "category" : "mobility",
+            "status" : "available"
+        }));
 
-            publisher:          '5abc0267d608821850991038',
-            donee:              '',
-            category:           "mobility",
-            status:             "available"
+        // Article 6
+        await this.createArticle(new Article({
+            "_id" : ObjectId("5c117523029f1e1b6895d564"),
+            "name" : "Tennisschläger",
+            "description" : "Profi-Tennisschläger zu verschenken. Habe diesen von Roger Federer geschenkt erhalten.",
+            "handover" : "Kann bei mir abgeholt werden.\nKontakt: fm@fm.com (Felix Muster).",
+            "overviewImage" : "Tennisschlaeger01.jpg",
+            "additionalImages" : [],
+            "tags" : "Tennisschläger Sport",
+            "donationDate" : null,
+            "publisher" : ObjectId("5abc0267d608821850991038"),
+            "donee" : ObjectId("5abc0267d608821850991037"),
+            "category" : "leisure",
+            "status" : "donated"
+        }));
+
+        // Article 7
+        await this.createArticle(new Article({
+            "_id" : ObjectId("5c117d1a029f1e1b6895d565"),
+            "name" : "Garten Grill",
+            "description" : "Garten Grill zu verschenken wegen Umzug.\nKann für 5 bis 10 Personen eingesetzt werden.\nIst 3 Jahre alt und im guten Zustand.",
+            "handover" : "Bei Interesse bei mir abholen.\nKontakt: hm@hm.com (Hans Muster).",
+            "overviewImage" : "Grill-01.jpg",
+            "additionalImages" : [
+                "Grill-02.jpg",
+                "Grill-03.jpg"
+            ],
+            "tags" : "Garten Grill Party Fleisch Ernährung",
+            "donationDate" : null,
+            "publisher" : ObjectId("5abc0267d608821850991037"),
+            "donee" : null,
+            "category" : "nutrition",
+            "status" : "available"
+        }));
+
+        // Article 8
+        await this.createArticle(new Article({
+            "_id" : ObjectId("5c11832c029f1e1b6895d566"),
+            "name" : "2er Sofa Ikea",
+            "description" : "Ikea 2er Sofa, stylish und modern zu verschenken wegen Umzug.\nEs ist sehr bequem, erst 1 Jahr alt und in sehr gutem Zustand.",
+            "handover" : "Das Sofa kann bei mir abgeholt werden. Den Transport bitte selber organisieren.\nKontakt: hm@hm.com (Hans Muster).",
+            "overviewImage" : "Sofa-01.jpg",
+            "additionalImages" : [
+                "Sofa-02.jpg",
+                "Sofa-03.jpg"
+            ],
+            "tags" : "2er Sofa Ikea bequem",
+            "donationDate" : null,
+            "publisher" : ObjectId("5abc0267d608821850991037"),
+            "donee" : null,
+            "category" : "household",
+            "status" : "available"
+        }));
+
+        // Article 9
+        await this.createArticle(new Article({
+            "_id" : ObjectId("5c127507962ca914fcbbb86f"),
+            "name" : "Staubsauger",
+            "description" : "Staubsauger zu verschenken.\nMit diesem Teil macht das Staubsaugen echt Spass !\n\nEs ist 2 Jahre alt und in einem guten Zustand.\nWir brauchen einen grösseren Staubsauger für die neue Wohnung.",
+            "handover" : "Der Staubsauger kann nach vorheriger Terminvereinbarung abgeholt werden.\nKontakt: hm@hm.com (Hans Muster).",
+            "overviewImage" : "Staubsauger01.jpg",
+            "additionalImages" : [
+                "Staubsauger02.jpg"
+            ],
+            "tags" : "Staubsauger reinigen Spass",
+            "donationDate" : null,
+            "publisher" : ObjectId("5abc0267d608821850991037"),
+            "donee" : null,
+            "category" : "household",
+            "status" : "available"
+        }));
+
+        // Article 10
+        await this.createArticle(new Article({
+            "_id" : ObjectId("5c129e55962ca914fcbbb870"),
+            "name" : "Skateboard",
+            "description" : "Cooles Skateboard zu verschenken. Wer will kann es haben, ich brauche es nicht mehr.",
+            "handover" : "Kann bei mir abgeholt werden.\nKontakt: hm@hm.com (Hans Meier):",
+            "overviewImage" : "Skateboard01.jpg",
+            "additionalImages" : [],
+            "tags" : "Skateboard Freizeit Sport",
+            "donationDate" : null,
+            "publisher" : ObjectId("5abc0267d608821850991037"),
+            "donee" : null,
+            "category" : "leisure",
+            "status" : "available"
         }));
 
         console.log('Die initialen Datenbank-Einträge für die Collection Article wurden erfolgreich erstellt.');
