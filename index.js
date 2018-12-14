@@ -46,6 +46,7 @@ server.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 server.use(logger('dev'));
 server.use(bodyParser.json());
 server.use(cookieParser());
+// This path must be correct to be able to start the frontend over backend, without angular development server.
 server.use(express.static(path.join(__dirname, '/../hofmann_polak_give-it-away-frontend/dist-prod')));
 server.use("/public", express.static(__dirname + "/public"));
 
